@@ -6,6 +6,6 @@ cmake_minimum_required (VERSION 3.8)
 project ("bencode")
 
 # Add source to this project's executable.
-add_executable (bencode "bencode.cpp" "bencode.h")
+add_executable (bencode "bencode.cpp" "bencode.h" "bdict.h" "dict.cpp" "decode.cpp" "bstring.cpp" "bstring.h" "decode.h")
 
 # TODO: Add tests and install targets if needed.
