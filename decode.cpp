@@ -2,10 +2,14 @@
 #include "bdict.h"
 #include "bstring.h"
 #include "decode.h"
+#include <vector>
+#include <variant>
 
 namespace bencode
 {
-	bstring decoder<bstring>::decode(stringstream& ss) {
+
+	template<>
+	variant<string,bstring> decode<bstring>(stringstream& ss) {
 		int n;
 		char del;
 
@@ -22,15 +26,54 @@ namespace bencode
 
 		return bstring(word);
 	}
+	
+	template<>
+	variant<string,bint> decode<bint>(stringstream& ss) {
+		char i;
+		ss >> i;
 
-	bdict decoder<bdict>::decode(stringstream& ss) {
+		if (i != 'i') { 
+			throw &"decoder: cannot parse as int. Expected input 'i', actual " [ i]; 
+		}
+
+		string intstring;
+		char ch;
+		while (ss >> ch, ch != 'e') {
+			intstring += ch;
+		}
+
+		int n = stoi(intstring);
+
+		return bint(n);
+	}
+
+	template<>
+	variant<string,blist> decode<blist>(stringstream& ss) {
+		char l;
+		ss >> l;
+
+		if (l != 'l') {
+			throw "decoder: could not parse as list. Expected input 'l', actual " + l;
+		}
+
+		vector<string> items;
+		while (ss.peek() != 'e') {
+			
+
+			//items.push_back(item);
+		}
+
+		return "";
+	}
+
+	template<>
+	variant<string,bdict> decode<bdict>(stringstream& ss) {
 		char d;
 		ss >> d;
 
-		decoder<bstring> stringDecoder;
-		auto word = stringDecoder.decode(ss);
+		
 
-		return;
+		return "";
 
 
 	}

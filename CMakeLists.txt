@@ -4,8 +4,10 @@
 cmake_minimum_required (VERSION 3.8)
 
 project ("bencode")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add source to this project's executable.
-add_executable (bencode "bencode.cpp" "bencode.h" "bdict.h" "dict.cpp" "decode.cpp" "bstring.cpp" "bstring.h" "decode.h")
-
-# TODO: Add tests and install targets if needed.
+add_executable (bencode "bencode.cpp" "bencode.h" "bdict.h"  "decode.cpp" "bstring.cpp" "bstring.h" "decode.h" "bint.h" "blist.h" "utils.h")
+target_compile_features(bencode PRIVATE cxx_std_17)
