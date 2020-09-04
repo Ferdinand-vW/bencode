@@ -17,6 +17,7 @@
 [Dd]ebug/
 [Bb]uild/
 [Dd]ebugPublic/
+.clangd/
 [Rr]elease/
 [Rr]eleases/
 x64/
