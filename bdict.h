@@ -4,8 +4,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-#include "bdata.h"
-#include "bstring.h"
+#include "btypes.h"
 using namespace std;
 
 namespace bencode

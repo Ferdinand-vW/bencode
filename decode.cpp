@@ -1,12 +1,41 @@
+#include <cctype>
+#include <sstream>
 #include <string>
 #include "bdict.h"
 #include "bstring.h"
+#include "btypes.h"
 #include "decode.h"
+#include "utils.h"
 #include <vector>
 #include <variant>
+#include <functional>
 
 namespace bencode
 {
+	bool peek_bint(stringstream& ss) {
+		char i = ss.peek();
+
+		return i == 'i';
+	}
+
+
+	bool peek_bstring(stringstream &ss) {
+		char s = ss.peek();
+
+		return isdigit(s);
+	}
+
+	bool peek_blist(stringstream &ss) {
+		char l = ss.peek();
+
+		return l == 'l';
+	}
+
+	bool peek_dict(stringstream& ss) {
+		char d = ss.peek();
+
+		return d == 'd';
+	}
 
 	template<>
 	variant<string,bstring> decode<bstring>(stringstream& ss) {
@@ -33,7 +62,7 @@ namespace bencode
 		ss >> i;
 
 		if (i != 'i') { 
-			throw &"decoder: cannot parse as int. Expected input 'i', actual " [ i]; 
+			return &"decoder: cannot parse as int. Expected input 'i', actual " [ i]; 
 		}
 
 		string intstring;
@@ -53,14 +82,13 @@ namespace bencode
 		ss >> l;
 
 		if (l != 'l') {
-			throw "decoder: could not parse as list. Expected input 'l', actual " + l;
+			return &"decoder: could not parse as list. Expected input 'l', actual " [ l];
 		}
 
-		vector<string> items;
+		vector<bdata> items;
 		while (ss.peek() != 'e') {
-			
-
-			//items.push_back(item);
+			auto item = get<bdata>(decode<bdata>(ss));			
+			items.push_back(item);
 		}
 
 		return "";
@@ -76,5 +104,25 @@ namespace bencode
 		return "";
 
 
+	}
+
+	template<>
+	variant<string,bdata> decode<bdata>(stringstream& ss) {
+
+		if(peek_bint(ss)) {
+			auto vint = decode<bint>(ss);
+			return map(vint,function<bdata(bint)>([](auto a) { return a; }));
+		
+		} else if (peek_bstring(ss)) {
+			auto vstring = decode<bstring>(ss);
+			return map(vstring,function<bdata(bstring)>([](auto a) { return a; }));
+
+		} else if (peek_blist(ss)) {
+			auto vlist = decode<blist>(ss);
+			return map(vlist,function<bdata(blist)>([](auto a) { return a;}));
+		} else {
+			auto vdict = decode<bdict>(ss);
+			return map(vdict,function<bdata(bdict)>([](auto a) { return a; }));
+		}
 	}
 }

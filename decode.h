@@ -8,7 +8,6 @@
 #include "bdict.h"
 #include "bint.h"
 #include "blist.h"
-#include "bdata.h"
 #include <variant>
 #include "utils.h"
 
@@ -36,4 +35,9 @@ namespace bencode
 
 	template<class T>
 	variant<string, T> decode(stringstream& ss);
+
+	bool peek_bint(stringstream& ss);
+	bool peek_bstring(stringstream& ss);
+	bool peek_blist(stringstream& ss);
+	bool peek_bdict(stringstream& ss);
 }

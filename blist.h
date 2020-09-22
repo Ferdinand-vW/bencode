@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "bdata.h"
+#include "btypes.h"
 
 using namespace std;
 

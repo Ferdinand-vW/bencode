@@ -11,6 +11,8 @@ namespace bencode {
 		string s;
 	public:
 			bstring(string ss) : s(ss) {};
+
+			string get_internal() { return s; }
 	};
 
 	bstring decode(stringstream& ss);

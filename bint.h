@@ -1,6 +1,6 @@
 #pragma once
 
-#include "bdata.h"
+#include "btypes.h"
 
 namespace bencode {
 
@@ -8,5 +8,7 @@ namespace bencode {
 		int i;
 	public:
 		bint(int j) : i(j) {};
+
+		int get_internal()  { return i; }
 	};
 }
