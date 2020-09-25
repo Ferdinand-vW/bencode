@@ -49,7 +49,7 @@ namespace bencode
 
 		while (n > 0) {
 			ss >> ch;
-			word += ch;
+			word.push_back(ch);
 			n--;
 		}
 
@@ -62,12 +62,13 @@ namespace bencode
 		ss >> i;
 
 		if (i != 'i') { 
-			return &"decoder: cannot parse as int. Expected input 'i', actual " [ i]; 
+			return string("decoder: cannot parse as int. Expected input 'i', actual ") + i; 
 		}
 
 		string intstring;
 		char ch;
 		while (ss >> ch, ch != 'e') {
+			cout << string("") + ch << endl;
 			intstring += ch;
 		}
 
@@ -84,27 +85,32 @@ namespace bencode
 		if (l != 'l') {
 			return &"decoder: could not parse as list. Expected input 'l', actual " [ l];
 		}
-
+		cout << to_string(ss.peek()) << endl;
 		vector<bdata> items;
 		while (ss.peek() != 'e') {
-			auto item = get<bdata>(decode<bdata>(ss));			
-			items.push_back(item);
+			auto decodedItem = decode<bdata>(ss);
+			if (decodedItem.index() == 0) { 
+				cout << "index is 0" << get<string>(decodedItem) << endl;
+				return get<string>(decodedItem); }
+			else { items.push_back(get<bdata>(decodedItem)); }
+
+			if (ss.peek() == ':') { ss >> l;}		
 		}
 
-		return "";
+		return blist(items);
 	}
 
-	template<>
-	variant<string,bdict> decode<bdict>(stringstream& ss) {
-		char d;
-		ss >> d;
+	// template<>
+	// variant<string,bdict> decode<bdict>(stringstream& ss) {
+	// 	char d;
+	// 	ss >> d;
 
 		
 
-		return "";
+	// 	return "";
 
 
-	}
+	// }
 
 	template<>
 	variant<string,bdata> decode<bdata>(stringstream& ss) {
@@ -121,8 +127,9 @@ namespace bencode
 			auto vlist = decode<blist>(ss);
 			return map(vlist,function<bdata(blist)>([](auto a) { return a;}));
 		} else {
-			auto vdict = decode<bdict>(ss);
-			return map(vdict,function<bdata(bdict)>([](auto a) { return a; }));
+			return string("dict");
+			// auto vdict = decode<bdict>(ss);
+			// return map(vdict,function<bdata(bdict)>([](auto a) { return a; }));
 		}
 	}
 }

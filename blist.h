@@ -11,5 +11,6 @@ namespace bencode {
 
 	public:
 		blist(vector<bdata> _items) : items(_items) {};
+		vector<bdata> get_internal() { return items; }
 	};
 }

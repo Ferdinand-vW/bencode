@@ -36,6 +36,9 @@ namespace bencode
 	template<class T>
 	variant<string, T> decode(stringstream& ss);
 
+	template<>
+	variant<string,bdata> decode<bdata>(stringstream& ss);
+
 	bool peek_bint(stringstream& ss);
 	bool peek_bstring(stringstream& ss);
 	bool peek_blist(stringstream& ss);
