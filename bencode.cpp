@@ -18,7 +18,7 @@ int main()
 {
 	cout << "Hello CMake." << endl;
 
-	stringstream test("i47434e4:testli56e:5:yuiope");
+	stringstream test("i47434e4:testli56e:5:yuioped3:cow3:moo4:spam4:eggse");
 
 	// bdata bd = decode(test);
 
@@ -33,6 +33,11 @@ int main()
 	auto l = decode<bdata>(test);
 	
 	auto items = get<blist>(get<bdata>(l)).get_internal();
+
+	auto dict = decode<bdict>(test);
+
+	if (dict.index() == 0) { cout << get<string>(dict); }
+	// else { cout << (get<bdict>(dict).get_internal().begin()->first); }
 	// auto parseItem = [](bdata &item) { cout << item.get_internal(); };
 	// for_each(items.begin(), items.end(), parseItem);
 

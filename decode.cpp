@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cctype>
 #include <sstream>
 #include <string>
@@ -7,6 +8,7 @@
 #include "decode.h"
 #include "utils.h"
 #include <vector>
+#include <map>
 #include <variant>
 #include <functional>
 
@@ -85,12 +87,11 @@ namespace bencode
 		if (l != 'l') {
 			return &"decoder: could not parse as list. Expected input 'l', actual " [ l];
 		}
-		cout << to_string(ss.peek()) << endl;
+
 		vector<bdata> items;
 		while (ss.peek() != 'e') {
 			auto decodedItem = decode<bdata>(ss);
 			if (decodedItem.index() == 0) { 
-				cout << "index is 0" << get<string>(decodedItem) << endl;
 				return get<string>(decodedItem); }
 			else { items.push_back(get<bdata>(decodedItem)); }
 
@@ -100,36 +101,58 @@ namespace bencode
 		return blist(items);
 	}
 
-	// template<>
-	// variant<string,bdict> decode<bdict>(stringstream& ss) {
-	// 	char d;
-	// 	ss >> d;
+	template<>
+	variant<string,bdict> decode<bdict>(stringstream& ss) {
+		char d;
+		ss >> d;
 
-		
+		if (d != 'd') {
+			return string("decoder: could not parse as dict. Expected input 'd', actual ") + d;
+		}
 
-	// 	return "";
+		map<bstring,bdata> dict;
 
+		while(ss.peek() != 'e') {
+			auto decodedKey = decode<bstring>(ss);
+			if(decodedKey.index() == 0) { return get<string>(decodedKey); } // abort with error
+			
+			char col;
+			ss >> col;
 
-	// }
+			if (col != ':') { return string("decoder: could not parse as dict. Expected delimiter ':', actual ") + col; }
+
+			auto decodedValue = decode<bdata>(ss);
+
+			if (decodedValue.index() == 0) { return get<string>(decodedValue); }
+			else { dict.insert( {get<bstring>(decodedKey),get<bdata>(decodedValue)} ); }
+		}
+
+		return variant<string,bdict>(bdict(dict));
+	}
 
 	template<>
 	variant<string,bdata> decode<bdata>(stringstream& ss) {
 
 		if(peek_bint(ss)) {
 			auto vint = decode<bint>(ss);
-			return map(vint,function<bdata(bint)>([](auto a) { return a; }));
-		
+			if (vint.index() == 0) { return get<string>(vint); }
+			else 				   { return get<bint>(vint); }
+			
 		} else if (peek_bstring(ss)) {
+
 			auto vstring = decode<bstring>(ss);
-			return map(vstring,function<bdata(bstring)>([](auto a) { return a; }));
+			if (vstring.index() == 0) { return get<string>(vstring); }
+			else	 				  { return get<bstring>(vstring); }
+
 
 		} else if (peek_blist(ss)) {
 			auto vlist = decode<blist>(ss);
-			return map(vlist,function<bdata(blist)>([](auto a) { return a;}));
+			if (vlist.index() == 0) { return get<string>(vlist); }
+			else 					{ return get<blist>(vlist); }
 		} else {
-			return string("dict");
-			// auto vdict = decode<bdict>(ss);
-			// return map(vdict,function<bdata(bdict)>([](auto a) { return a; }));
+			auto vdict = decode<bdict>(ss);
+			if (vdict.index() == 0) { return get<string>(vdict); }
+			else 					{ return get<bdict>(vdict); }
 		}
 	}
 }

@@ -26,13 +26,13 @@ namespace bencode {
 		else { return b; }
 	}
 
-	template<class A,class B,class S>
-	variant<S,B> map(variant<S,A> v,function<B(A)> f) {
-		auto alt = holds_alternative<A>(v);
+	// template<class A,class B,class S>
+	// variant<S,B> map(variant<S,A> v,function<B(A)> f) {
+	// 	auto alt = holds_alternative<A>(v);
 
-		if(alt) { return f(get<A>(v)); }
-		else { return get<S>(v); }
-	}
+	// 	if(alt) { return f(get<A>(v)); }
+	// 	else { return get<S>(v); }
+	// }
 
 	
 }

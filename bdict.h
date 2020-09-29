@@ -4,14 +4,16 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include "bstring.h"
 #include "btypes.h"
 using namespace std;
 
 namespace bencode
 {
 	class bdict {
-		map<string, bdata> key_values;
+		map<bstring, bdata> key_values;
 	public:
-		bdict(map<string, bdata> kv) : key_values(kv) {};
+		bdict(map<bstring, bdata> kv) : key_values(kv) {};
+		map<bstring,bdata> get_internal() { return key_values; }
 	};
 }
