@@ -1,6 +1,8 @@
 #pragma once
 
-#include "btypes.h"
+#include <ostream>
+
+using namespace std;
 
 namespace bencode {
 
@@ -9,6 +11,12 @@ namespace bencode {
 	public:
 		bint(int j) : i(j) {};
 
-		int get_internal()  { return i; }
+		int get_internal() const { return i; }
+
+		friend ostream& operator<<(ostream& os, const bint& bi) {
+			os << bi.get_internal();
+
+			return os;
+		}
 	};
 }

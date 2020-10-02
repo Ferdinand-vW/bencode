@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ostream>
 #include <vector>
 #include "btypes.h"
 
@@ -11,6 +12,13 @@ namespace bencode {
 
 	public:
 		blist(vector<bdata> _items) : items(_items) {};
-		vector<bdata> get_internal() { return items; }
+
+		const vector<bdata> get_internal() { return items; }
+
+		friend ostream& operator<<(ostream& os, const blist &bl) {
+			// os << bl.items;
+
+			return os;
+		}
 	};
 }

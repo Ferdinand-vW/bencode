@@ -94,9 +94,9 @@ namespace bencode
 			if (decodedItem.index() == 0) { 
 				return get<string>(decodedItem); }
 			else { items.push_back(get<bdata>(decodedItem)); }
-
-			if (ss.peek() == ':') { ss >> l;}		
 		}
+
+		ss >> l; // drop e
 
 		return blist(items);
 	}
@@ -126,6 +126,8 @@ namespace bencode
 			if (decodedValue.index() == 0) { return get<string>(decodedValue); }
 			else { dict.insert( {get<bstring>(decodedKey),get<bdata>(decodedValue)} ); }
 		}
+
+		ss >> d; // drop e
 
 		return variant<string,bdict>(bdict(dict));
 	}

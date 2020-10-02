@@ -2,6 +2,7 @@
 //
 
 #include "bencode.h"
+#include "bdict.h"
 #include "decode.h"
 #include "bstring.h"
 #include <algorithm>
@@ -22,7 +23,7 @@ int main()
 
 	// bdata bd = decode(test);
 
-	auto d = bencode::decode<bencode::bdata>(test);
+	auto d = decode<bencode::bdata>(test);
 
 	cout << get<bint>(get<bdata>(d)).get_internal() << endl;
 
@@ -37,6 +38,10 @@ int main()
 	auto dict = decode<bdict>(test);
 
 	if (dict.index() == 0) { cout << get<string>(dict); }
+	else {
+		auto mapdict = get<bdict>(dict).get_internal();
+		cout << mapdict;
+	}
 	// else { cout << (get<bdict>(dict).get_internal().begin()->first); }
 	// auto parseItem = [](bdata &item) { cout << item.get_internal(); };
 	// for_each(items.begin(), items.end(), parseItem);

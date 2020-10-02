@@ -12,7 +12,13 @@ namespace bencode {
 	public:
 			bstring(string ss) : s(ss) {};
 
-			string get_internal() { return s; }
+		string get_internal() const { return s; }
+
+		friend ostream& operator<<(ostream& os, bstring& bs) {
+			os << bs.s;
+
+			return os;
+		}
 			
 		friend bool operator<(bstring b1,bstring b2) {
 			return b1.get_internal() < b2.get_internal();
