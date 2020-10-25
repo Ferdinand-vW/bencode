@@ -19,29 +19,29 @@ int main()
 {
 	cout << "Hello CMake." << endl;
 
-	stringstream test("i47434e4:testli56e:5:yuioped3:cow3:moo4:spam4:eggse");
+	stringstream test("i47434e4:testli56e5:yuioped3:cowi7856e4:spam4:eggse");
 
-	// bdata bd = decode(test);
-
-	auto d = decode<bencode::bdata>(test);
-
-	cout << get<bint>(get<bdata>(d)).get_internal() << endl;
+	auto i = decode<bencode::bdata>(test);
+	std::visit([](const auto arg) { cout << arg << endl;}, i);
 
 	auto t = decode<bdata>(test);
-	cout << t.index() << endl;
-	cout << get<bstring>(get<bdata>(t)).get_internal() << endl;
+	std::visit([](const auto arg) { cout << arg << endl;}, t);
 
 	auto l = decode<bdata>(test);
-	
-	auto items = get<blist>(get<bdata>(l)).get_internal();
+	std::visit([](const auto arg) { cout << arg << endl;}, l);
 
-	auto dict = decode<bdict>(test);
+	auto d = decode<bdata>(test);
+	std::visit([](const auto arg) { cout << arg << endl;}, d);
 
-	if (dict.index() == 0) { cout << get<string>(dict); }
-	else {
-		auto mapdict = get<bdict>(dict).get_internal();
-		cout << mapdict;
-	}
+	// auto items = get<blist>(get<bdata>(l)).get_internal();
+
+	// auto dict = decode<bdict>(test);
+
+	// if (dict.index() == 0) { cout << get<string>(dict); }
+	// else {
+	// 	auto mapdict = get<bdict>(dict).get_internal();
+	// 	cout << mapdict;
+	// }
 	// else { cout << (get<bdict>(dict).get_internal().begin()->first); }
 	// auto parseItem = [](bdata &item) { cout << item.get_internal(); };
 	// for_each(items.begin(), items.end(), parseItem);

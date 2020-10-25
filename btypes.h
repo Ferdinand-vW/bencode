@@ -1,6 +1,7 @@
 #pragma once
 
 #include <variant>
+#include <memory>
 using namespace std;
 
 namespace bencode {

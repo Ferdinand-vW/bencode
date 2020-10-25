@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ostream>
+#include "btypes.h"
 
 using namespace std;
 

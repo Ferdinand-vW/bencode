@@ -8,17 +8,13 @@ using namespace std;
 
 namespace bencode {
 	class blist {
-		vector<bdata> items;
+		vector<shared_ptr<bdata>> items;
 
 	public:
-		blist(vector<bdata> _items) : items(_items) {};
+		blist(vector<shared_ptr<bdata>> _items) : items(_items) {};
 
-		const vector<bdata> get_internal() { return items; }
+		vector<shared_ptr<bdata>> get_internal() const { return items; }
 
-		friend ostream& operator<<(ostream& os, const blist &bl) {
-			// os << bl.items;
-
-			return os;
-		}
+		friend ostream& operator<<(ostream& os, const blist &bl);
 	};
 }

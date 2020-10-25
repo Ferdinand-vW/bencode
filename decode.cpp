@@ -1,9 +1,12 @@
 #include <algorithm>
 #include <cctype>
+#include <memory>
 #include <sstream>
 #include <string>
 #include "bdict.h"
 #include "bstring.h"
+#include "bint.h"
+#include "blist.h"
 #include "btypes.h"
 #include "decode.h"
 #include "utils.h"
@@ -70,7 +73,6 @@ namespace bencode
 		string intstring;
 		char ch;
 		while (ss >> ch, ch != 'e') {
-			cout << string("") + ch << endl;
 			intstring += ch;
 		}
 
@@ -88,12 +90,13 @@ namespace bencode
 			return &"decoder: could not parse as list. Expected input 'l', actual " [ l];
 		}
 
-		vector<bdata> items;
+		vector<shared_ptr<bdata>> items;
+
+		// decode any additional items
 		while (ss.peek() != 'e') {
-			auto decodedItem = decode<bdata>(ss);
-			if (decodedItem.index() == 0) { 
-				return get<string>(decodedItem); }
-			else { items.push_back(get<bdata>(decodedItem)); }
+			auto item = decode<bdata>(ss);
+			if (item.index() == 0) { return get<string>(item); }
+			else { items.push_back(make_shared<bdata>(get<bdata>(item))); }
 		}
 
 		ss >> l; // drop e
@@ -110,26 +113,26 @@ namespace bencode
 			return string("decoder: could not parse as dict. Expected input 'd', actual ") + d;
 		}
 
-		map<bstring,bdata> dict;
+		map<bstring,shared_ptr<bdata>> dict;
 
 		while(ss.peek() != 'e') {
 			auto decodedKey = decode<bstring>(ss);
 			if(decodedKey.index() == 0) { return get<string>(decodedKey); } // abort with error
-			
-			char col;
-			ss >> col;
-
-			if (col != ':') { return string("decoder: could not parse as dict. Expected delimiter ':', actual ") + col; }
 
 			auto decodedValue = decode<bdata>(ss);
 
 			if (decodedValue.index() == 0) { return get<string>(decodedValue); }
-			else { dict.insert( {get<bstring>(decodedKey),get<bdata>(decodedValue)} ); }
+			else { 
+				bstring key = get<bstring>(decodedKey);
+				bdata val = get<bdata>(decodedValue);
+				
+				dict.insert({key,make_shared<bdata>(val) }); 
+			}
 		}
 
 		ss >> d; // drop e
 
-		return variant<string,bdict>(bdict(dict));
+		return bdict(dict);
 	}
 
 	template<>

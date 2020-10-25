@@ -15,7 +15,7 @@ namespace bencode {
 		string get_internal() const { return s; }
 
 		friend ostream& operator<<(ostream& os, bstring& bs) {
-			os << bs.s;
+			os << bs.get_internal();
 
 			return os;
 		}
