@@ -10,3 +10,6 @@ file(GLOB SOURCES "src/*.cpp")
 # Add source to this project's executable.
 add_executable (bencode ${SOURCES})
 target_compile_features(bencode PRIVATE cxx_std_17)
+
+enable_testing()
+add_subdirectory(test)
