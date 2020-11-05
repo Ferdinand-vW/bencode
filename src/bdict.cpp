@@ -6,11 +6,6 @@
 
 namespace bencode {
 
-    void print_item(ostream& os, const bstring &key, const bdata &value) {
-        os << key << "=>";
-        os << value << ",";
-    }
-
     ostream& operator<<(ostream& os, const bdict &bd) {
         auto kvs = bd.get_internal();
         os << "{";

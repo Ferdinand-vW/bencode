@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <boost/outcome/outcome.hpp>
+#include <boost/system/error_code.hpp>
 #include <cctype>
 #include <memory>
 #include <sstream>
@@ -10,6 +12,7 @@
 #include "btypes.h"
 #include "decode.h"
 #include "utils.h"
+#include <system_error>
 #include <vector>
 #include <map>
 #include <variant>
@@ -43,7 +46,7 @@ namespace bencode
 	}
 
 	template<>
-	variant<string,bstring> decode<bstring>(stringstream& ss) {
+	outcome<bstring> decode<bstring>(stringstream& ss) {
 		int n;
 		char del;
 
@@ -62,12 +65,13 @@ namespace bencode
 	}
 	
 	template<>
-	variant<string,bint> decode<bint>(stringstream& ss) {
+	outcome<bint> decode<bint>(stringstream& ss) {
 		char i;
 		ss >> i;
 
-		if (i != 'i') { 
-			return string("decoder: cannot parse as int. Expected input 'i', actual ") + i; 
+		if (i != 'i') {
+			return boost::system::errc::address_in_use; 
+			// return throw("decoder: cannot parse as int. Expected input 'i', actual ") + i; 
 		}
 
 		string intstring;
@@ -82,12 +86,13 @@ namespace bencode
 	}
 
 	template<>
-	variant<string,blist> decode<blist>(stringstream& ss) {
+	outcome<blist> decode<blist>(stringstream& ss) {
 		char l;
 		ss >> l;
 
 		if (l != 'l') {
-			return &"decoder: could not parse as list. Expected input 'l', actual " [ l];
+			return boost::system::errc::address_in_use;
+			// return &"decoder: could not parse as list. Expected input 'l', actual " [ l];
 		}
 
 		vector<shared_ptr<bdata>> items;
@@ -95,8 +100,8 @@ namespace bencode
 		// decode any additional items
 		while (ss.peek() != 'e') {
 			auto item = decode<bdata>(ss);
-			if (item.index() == 0) { return get<string>(item); }
-			else { items.push_back(make_shared<bdata>(get<bdata>(item))); }
+			if (!item) { return item.error(); }
+			else { items.push_back(make_shared<bdata>(item.value())); }
 		}
 
 		ss >> l; // drop e
@@ -105,26 +110,27 @@ namespace bencode
 	}
 
 	template<>
-	variant<string,bdict> decode<bdict>(stringstream& ss) {
+	outcome<bdict> decode<bdict>(stringstream& ss) {
 		char d;
 		ss >> d;
 
 		if (d != 'd') {
-			return string("decoder: could not parse as dict. Expected input 'd', actual ") + d;
+			return boost::system::errc::address_in_use;
+			// return string("decoder: could not parse as dict. Expected input 'd', actual ") + d;
 		}
 
 		map<bstring,shared_ptr<bdata>> dict;
 
 		while(ss.peek() != 'e') {
 			auto decodedKey = decode<bstring>(ss);
-			if(decodedKey.index() == 0) { return get<string>(decodedKey); } // abort with error
+			if(!decodedKey) { return decodedKey.error(); } // abort with error
 
 			auto decodedValue = decode<bdata>(ss);
 
-			if (decodedValue.index() == 0) { return get<string>(decodedValue); }
+			if (!decodedValue) { return decodedValue.error(); }
 			else { 
-				bstring key = get<bstring>(decodedKey);
-				bdata val = get<bdata>(decodedValue);
+				bstring key = decodedKey.value();
+				bdata val   = decodedValue.value();
 				
 				dict.insert({key,make_shared<bdata>(val) }); 
 			}
@@ -136,28 +142,28 @@ namespace bencode
 	}
 
 	template<>
-	variant<string,bdata> decode<bdata>(stringstream& ss) {
+	outcome<bdata> decode<bdata>(stringstream& ss) {
 
 		if(peek_bint(ss)) {
 			auto vint = decode<bint>(ss);
-			if (vint.index() == 0) { return get<string>(vint); }
-			else 				   { return get<bint>(vint); }
+			if (!vint) { return vint.error(); }
+			else 				   { return vint.value(); }
 			
 		} else if (peek_bstring(ss)) {
 
-			auto vstring = decode<bstring>(ss);
-			if (vstring.index() == 0) { return get<string>(vstring); }
-			else	 				  { return get<bstring>(vstring); }
+			if (auto vstring = decode<bstring>(ss)) 
+				 { return vstring.value(); }
+			else { return vstring.error(); }
 
 
 		} else if (peek_blist(ss)) {
 			auto vlist = decode<blist>(ss);
-			if (vlist.index() == 0) { return get<string>(vlist); }
-			else 					{ return get<blist>(vlist); }
+			if (!vlist) { return vlist.error(); }
+			else 	   { return vlist.value(); }
 		} else {
 			auto vdict = decode<bdict>(ss);
-			if (vdict.index() == 0) { return get<string>(vdict); }
-			else 					{ return get<bdict>(vdict); }
+			if (!vdict) { return vdict.error(); }
+			else 	    { return vdict.value(); }
 		}
 	}
 }
