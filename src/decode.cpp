@@ -5,6 +5,13 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <system_error>
+#include <vector>
+#include <map>
+#include <variant>
+#include <functional>
+
+#include "error_code.h"
 #include "bdict.h"
 #include "bstring.h"
 #include "bint.h"
@@ -12,11 +19,6 @@
 #include "btypes.h"
 #include "decode.h"
 #include "utils.h"
-#include <system_error>
-#include <vector>
-#include <map>
-#include <variant>
-#include <functional>
 
 namespace bencode
 {
@@ -91,19 +93,22 @@ namespace bencode
 		ss >> l;
 
 		if (l != 'l') {
-			return boost::system::errc::address_in_use;
+			return BDecodeErrc::expected_list_open;
 			// return &"decoder: could not parse as list. Expected input 'l', actual " [ l];
 		}
 
 		vector<shared_ptr<bdata>> items;
 
 		// decode any additional items
-		while (ss.peek() != 'e') {
+		while (ss.peek() != 'e' && !ss.eof()) {
 			auto item = decode<bdata>(ss);
 			if (!item) { return item.error(); }
 			else { items.push_back(make_shared<bdata>(item.value())); }
 		}
 
+		if (ss.eof()) {
+			return BDecodeErrc::expected_list_end;
+		}
 		ss >> l; // drop e
 
 		return blist(items);
@@ -115,13 +120,13 @@ namespace bencode
 		ss >> d;
 
 		if (d != 'd') {
-			return boost::system::errc::address_in_use;
+			return BDecodeErrc::expected_dict_open;
 			// return string("decoder: could not parse as dict. Expected input 'd', actual ") + d;
 		}
 
 		map<bstring,shared_ptr<bdata>> dict;
 
-		while(ss.peek() != 'e') {
+		while(ss.peek() != 'e' && !ss.eof()) {
 			auto decodedKey = decode<bstring>(ss);
 			if(!decodedKey) { return decodedKey.error(); } // abort with error
 
@@ -134,6 +139,10 @@ namespace bencode
 				
 				dict.insert({key,make_shared<bdata>(val) }); 
 			}
+		}
+
+		if (ss.eof()) {
+			return BDecodeErrc::expected_dict_end;
 		}
 
 		ss >> d; // drop e

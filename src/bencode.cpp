@@ -17,8 +17,6 @@ using namespace bencode;
 
 int main()
 {
-	cout << "Hello CMake." << endl;
-
 	stringstream test("i47434e4:testli56e5:yuioped3:cowi7856e4:spam4:eggse");
 
 	auto i = decode<bencode::bdata>(test);
