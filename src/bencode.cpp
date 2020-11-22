@@ -17,7 +17,7 @@ using namespace bencode;
 
 int main()
 {
-	stringstream test("i47434e4:testli56e5:yuioped3:cowi7856e4:spam4:eggse");
+	stringstream test("i47434e4:testli56e5:yuioped3:cowi7856e4:spam4:eggs");
 
 	auto i = decode<bencode::bdata>(test);
 	if (i.has_value()) { cout << i.value() << endl; }

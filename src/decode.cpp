@@ -1,6 +1,4 @@
 #include <algorithm>
-#include <boost/outcome/outcome.hpp>
-#include <boost/system/error_code.hpp>
 #include <cctype>
 #include <memory>
 #include <sstream>
@@ -11,7 +9,7 @@
 #include <variant>
 #include <functional>
 
-#include "error_code.h"
+#include "error.h"
 #include "bdict.h"
 #include "bstring.h"
 #include "bint.h"
@@ -19,6 +17,9 @@
 #include "btypes.h"
 #include "decode.h"
 #include "utils.h"
+#include "error.h"
+
+using namespace std;
 
 namespace bencode
 {
@@ -48,7 +49,7 @@ namespace bencode
 	}
 
 	template<>
-	outcome<bstring> decode<bstring>(stringstream& ss) {
+	either<bstring> decode<bstring>(stringstream& ss) {
 		int n;
 		char del;
 
@@ -67,12 +68,12 @@ namespace bencode
 	}
 	
 	template<>
-	outcome<bint> decode<bint>(stringstream& ss) {
+	either<bint> decode<bint>(stringstream& ss) {
 		char i;
 		ss >> i;
 
 		if (i != 'i') {
-			return boost::system::errc::address_in_use; 
+			return BErrorF::generic_error(""); 
 			// return throw("decoder: cannot parse as int. Expected input 'i', actual ") + i; 
 		}
 
@@ -88,12 +89,12 @@ namespace bencode
 	}
 
 	template<>
-	outcome<blist> decode<blist>(stringstream& ss) {
+	either<blist> decode<blist>(stringstream& ss) {
 		char l;
 		ss >> l;
 
 		if (l != 'l') {
-			return BDecodeErrc::expected_list_open;
+			return BErrorF::expected_list_open(l);
 			// return &"decoder: could not parse as list. Expected input 'l', actual " [ l];
 		}
 
@@ -107,7 +108,7 @@ namespace bencode
 		}
 
 		if (ss.eof()) {
-			return BDecodeErrc::expected_list_end;
+			return BErrorF::expected_list_end();
 		}
 		ss >> l; // drop e
 
@@ -115,12 +116,12 @@ namespace bencode
 	}
 
 	template<>
-	outcome<bdict> decode<bdict>(stringstream& ss) {
+	either<bdict> decode<bdict>(stringstream& ss) {
 		char d;
 		ss >> d;
 
 		if (d != 'd') {
-			return BDecodeErrc::expected_dict_open;
+			return BErrorF::expected_dict_open(d);
 			// return string("decoder: could not parse as dict. Expected input 'd', actual ") + d;
 		}
 
@@ -142,7 +143,7 @@ namespace bencode
 		}
 
 		if (ss.eof()) {
-			return BDecodeErrc::expected_dict_end;
+			return BErrorF::expected_dict_end();
 		}
 
 		ss >> d; // drop e
@@ -151,7 +152,7 @@ namespace bencode
 	}
 
 	template<>
-	outcome<bdata> decode<bdata>(stringstream& ss) {
+	either<bdata> decode<bdata>(stringstream& ss) {
 
 		if(peek_bint(ss)) {
 			auto vint = decode<bint>(ss);

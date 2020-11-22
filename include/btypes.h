@@ -1,8 +1,16 @@
 #pragma once
 
+#include <boost/outcome/basic_outcome.hpp>
+#include <boost/outcome/basic_result.hpp>
+#include <boost/outcome/std_result.hpp>
+#include <error.h>
 #include <variant>
 #include <memory>
+
+#include <boost/outcome/outcome.hpp>
+
 using namespace std;
+using namespace boost::outcome_v2;
 
 namespace bencode {
     class bint;
@@ -10,4 +18,7 @@ namespace bencode {
     class blist;
     class bdict;
     typedef variant<bint,bstring,blist,bdict> bdata;
+
+    template<class T,class E = BError>
+    using either = checked<T,E>;
 }
