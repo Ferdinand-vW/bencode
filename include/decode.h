@@ -19,8 +19,6 @@ namespace bencode
 	either<T> decode(stringstream& ss);
 	template<>
 	either<bdata> decode<bdata>(stringstream& ss);
-	// template<>
-	// outcome<bdata> decode<bdata>(stringstream& ss);
 
 	bool peek_bint(stringstream& ss);
 	bool peek_bstring(stringstream& ss);

@@ -1,3 +1,4 @@
+#include "bdata.h"
 #include "blist.h"
 #include "bint.h"
 #include "bdict.h"

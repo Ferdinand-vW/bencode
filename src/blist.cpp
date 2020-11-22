@@ -2,6 +2,7 @@
 #include "bstring.h"
 #include "bint.h"
 #include "bdict.h"
+#include "bdata.h"
 #include "utils.h"
 
 namespace bencode {

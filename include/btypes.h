@@ -17,7 +17,8 @@ namespace bencode {
     class bstring;
     class blist;
     class bdict;
-    typedef variant<bint,bstring,blist,bdict> bdata;
+    class bdata;
+    typedef variant<bint,bstring,blist,bdict> bencoding;
 
     template<class T,class E = BError>
     using either = checked<T,E>;

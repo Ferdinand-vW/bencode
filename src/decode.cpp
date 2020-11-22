@@ -14,6 +14,7 @@
 
 #include "error.h"
 #include "bdict.h"
+#include "bdata.h"
 #include "bstring.h"
 #include "bint.h"
 #include "blist.h"
@@ -172,23 +173,23 @@ namespace bencode
 		if(peek_bint(ss)) {
 			auto vint = decode<bint>(ss);
 			if (!vint) { return vint.error(); }
-			else 				   { return vint.value(); }
+			else 	   { return bdata(vint.value()); }
 			
 		} else if (peek_bstring(ss)) {
 
 			if (auto vstring = decode<bstring>(ss)) 
-				 { return vstring.value(); }
+				 { return bdata(vstring.value()); }
 			else { return vstring.error(); }
 
 
 		} else if (peek_blist(ss)) {
 			auto vlist = decode<blist>(ss);
 			if (!vlist) { return vlist.error(); }
-			else 	   { return vlist.value(); }
+			else 	   { return bdata(vlist.value()); }
 		} else {
 			auto vdict = decode<bdict>(ss);
 			if (!vdict) { return vdict.error(); }
-			else 	    { return vdict.value(); }
+			else 	    { return bdata(vdict.value()); }
 		}
 	}
 }
