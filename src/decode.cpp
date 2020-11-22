@@ -61,10 +61,14 @@ namespace bencode
 		string word;
 		char ch;
 
-		while (n > 0) {
+		while (n > 0 && !ss.eof()) {
 			ss >> ch;
 			word.push_back(ch);
 			n--;
+		}
+
+		if (n > 0 && ss.eof()) {
+			return BErrorF::expected_string_symbols(n);
 		}
 
 		return bstring(word);

@@ -47,6 +47,10 @@ namespace bencode {
                 return BError("Could not convert input " + s + " to int.");
             }
 
+            static BError expected_string_symbols(int n) {
+                return BError("Found end of stream. bstring expected " + std::to_string(n) + " more symbols");
+            }
+
             static BError generic_error(std::string m) {
                 return BError(m);
             }
