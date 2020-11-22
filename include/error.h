@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ostream>
+#include <string>
 #include <system_error>
 #include <type_traits>
 
@@ -32,6 +33,18 @@ namespace bencode {
 
             static BError expected_list_end() {
                 return BError(std::string("Found end of stream. blist must be closed with 'e'"));
+            }
+
+            static BError expected_int_open(char c) {
+                return BError(std::string("Expected symbol 'i', but got ") + c);
+            }
+
+            static BError expected_int_end() {
+                return BError(std::string("Found end of stream. bint must be closed with 'e'"));
+            }
+
+            static BError conversion_to_int(std::string s) {
+                return BError("Could not convert input " + s + " to int.");
             }
 
             static BError generic_error(std::string m) {

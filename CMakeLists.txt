@@ -16,5 +16,6 @@ find_package(Boost 1.74.0)
 add_executable (bencode ${SOURCES})
 target_compile_features(bencode PRIVATE cxx_std_17)
 
+
 enable_testing()
 add_subdirectory(test)

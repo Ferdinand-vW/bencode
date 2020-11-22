@@ -2,12 +2,15 @@
 #include <cctype>
 #include <memory>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <system_error>
 #include <vector>
 #include <map>
 #include <variant>
 #include <functional>
+
+#include <boost/lexical_cast.hpp>
 
 #include "error.h"
 #include "bdict.h"
@@ -73,19 +76,27 @@ namespace bencode
 		ss >> i;
 
 		if (i != 'i') {
-			return BErrorF::generic_error(""); 
-			// return throw("decoder: cannot parse as int. Expected input 'i', actual ") + i; 
+			return BErrorF::expected_int_open(i);
 		}
 
 		string intstring;
 		char ch;
-		while (ss >> ch, ch != 'e') {
+		while (ss.peek() != 'e' && !ss.eof()) {
+			ss >> ch;
 			intstring += ch;
 		}
 
-		int n = stoi(intstring);
-
-		return bint(n);
+		if(ss.eof()) {
+			return BErrorF::expected_int_end();
+		}
+		
+		ss >> ch;
+		try {
+			int n = boost::lexical_cast<int>(intstring);
+			return bint(n);
+		} catch (...) {
+			return BErrorF::conversion_to_int(intstring);
+		}
 	}
 
 	template<>

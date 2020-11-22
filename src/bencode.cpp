@@ -17,12 +17,11 @@ using namespace bencode;
 
 int main()
 {
-	stringstream test("i47434e4:testli56e5:yuioped3:cowi7856e4:spam4:eggs");
+	stringstream test("i47434e4:testli56e5:yuioped3:cowi7856e4:spam4:eggse");
 
 	auto i = decode<bencode::bdata>(test);
 	if (i.has_value()) { cout << i.value() << endl; }
 	else   { cout << i.error().message() << endl; }
-	// std::visit([](const auto arg) { cout << arg << endl;}, i);
 
 	auto t = decode<bdata>(test);
 	if (t.has_value()) 
