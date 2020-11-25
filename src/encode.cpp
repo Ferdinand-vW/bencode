@@ -6,6 +6,7 @@
 #include "bdict.h"
 #include "bdata.h"
 #include "utils.h"
+#include <algorithm>
 #include <variant>
 #include <string>
 
@@ -13,22 +14,34 @@ namespace bencode {
 
     template<>
     std::string encode<bint>(bint bi) {
-        return "int";
+        return "i" + std::to_string(bi.get_internal()) + "e";
     }
 
     template<>
     std::string encode<bstring>(bstring bs) {
-        return "string";
+        auto s = bs.get_internal();
+        return std::to_string(s.length()) + ":" + s;
     }
 
     template<>
     std::string encode<bdict>(bdict bd) {
-        return "dict";
+        auto kvPtrs = bd.get_internal();
+        std::string s = "";
+
+        for(auto kv : kvPtrs) {
+            s += encode<bstring>(kv.first) + encode<bdata>(*kv.second); 
+        }
+        return "d" + s + "e";
     }
 
     template<>
     std::string encode<blist>(blist bl) {
-        return "list";
+        auto items = bl.get_internal();
+        std::string s = "";
+        for(auto i : items) {
+            s += encode<bdata>(*i);
+        }
+        return "l" + s + "e"; 
     }
 
     template<>

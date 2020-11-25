@@ -26,28 +26,28 @@ int main()
 	if (i.has_value()) { cout << i.value() << endl; }
 	else   { cout << i.error().message() << endl; }
 
-	cout << encode<bencode::bdata>(std::move(i.value()));
+	cout << encode(i.value()) << endl;;
 
 	auto t = decode<bencode::bdata>(test);
 	if (t.has_value()) 
 		   { cout << t.value() << endl; }
 	else   { cout << t.error().message() << endl; }
 
-	cout << encode(std::move(t.value()));
+	cout << encode(t.value()) << endl;;
 
 	auto l = decode<bdata>(test);
 	if (l.has_value()) 
 		   { cout << l.value() << endl; }
 	else   { cout << l.error().message() << endl; }
 
-	cout << encode(l.value());
+	cout << encode(l.value()) << endl;
 
 	auto d = decode<bdata>(test);
 	if (d.has_value()) 
 		   { cout << d.value() << endl; }
 	else   { cout << d.error().message() << endl; }
 
-	cout << encode(d.value());
+	cout << encode(d.value()) << endl;
 
 	return 0;
 }
