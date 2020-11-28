@@ -46,7 +46,7 @@ namespace bencode
 		return l == 'l';
 	}
 
-	bool peek_dict(stringstream& ss) {
+	bool peek_bdict(stringstream& ss) {
 		char d = ss.peek();
 
 		return d == 'd';
@@ -54,22 +54,34 @@ namespace bencode
 
 	template<>
 	either<bstring> decode<bstring>(stringstream& ss) {
-		int n;
-		char del;
+		string snum;
+		char d;
 
-		ss >> n >> del;
+		while(isdigit(ss.peek()) && !ss.eof()) { // build the int string
+			ss >> d;
+			snum+=d; 
+		}
 
+		int n = 0;
+		if (snum.length() > 0) { n = boost::lexical_cast<int>(snum); }
+		else if (ss.eof()) { return BErrorF::expected_string_open(""); }
+		else 		  	   { return BErrorF::expected_string_open(string(1,ss.peek())); }
+
+		char del = ss.peek();
+		if (del == ':') { ss >> del; } // parse and throw away the delimiter
+		else if (ss.eof()) { return BErrorF::expected_string_delimiter(""); }
+		else 		  	   { return BErrorF::expected_string_delimiter(string(1,del)); }
+		
 		string word;
 		char ch;
-
-		while (n > 0 && !ss.eof()) {
+		while (ss.peek() && n > 0 && !ss.eof()) { // peek is used to trigger eof bit
 			ss >> ch;
 			word.push_back(ch);
 			n--;
 		}
 
 		if (n > 0 && ss.eof()) {
-			return BErrorF::expected_string_symbols(n);
+			return BErrorF::expected_string_symbols(word,n);
 		}
 
 		return bstring(word);
@@ -111,7 +123,6 @@ namespace bencode
 
 		if (l != 'l') {
 			return BErrorF::expected_list_open(l);
-			// return &"decoder: could not parse as list. Expected input 'l', actual " [ l];
 		}
 
 		vector<shared_ptr<bdata>> items;
@@ -138,7 +149,6 @@ namespace bencode
 
 		if (d != 'd') {
 			return BErrorF::expected_dict_open(d);
-			// return string("decoder: could not parse as dict. Expected input 'd', actual ") + d;
 		}
 
 		map<bstring,shared_ptr<bdata>> dict;
@@ -176,20 +186,25 @@ namespace bencode
 			else 	   { return bdata(vint.value()); }
 			
 		} else if (peek_bstring(ss)) {
-
-			if (auto vstring = decode<bstring>(ss)) 
-				 { return bdata(vstring.value()); }
-			else { return vstring.error(); }
-
+			auto vstring = decode<bstring>(ss);
+			if (!vstring) { return vstring.error(); }
+			else 		  { return bdata(vstring.value()); }
 
 		} else if (peek_blist(ss)) {
 			auto vlist = decode<blist>(ss);
 			if (!vlist) { return vlist.error(); }
-			else 	   { return bdata(vlist.value()); }
-		} else {
+			else 	    { return bdata(vlist.value()); }
+		
+		} else if (peek_bdict(ss)) {
 			auto vdict = decode<bdict>(ss);
 			if (!vdict) { return vdict.error(); }
 			else 	    { return bdata(vdict.value()); }
+		
+		} else {
+			char c = ss.peek();
+			std::string s;
+			if (ss.eof()) { s = ""; } else { s = to_string(c); }
+			return BErrorF::invalid_input(s);
 		}
 	}
 }

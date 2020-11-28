@@ -47,8 +47,20 @@ namespace bencode {
                 return BError("Could not convert input " + s + " to int.");
             }
 
-            static BError expected_string_symbols(int n) {
-                return BError("Found end of stream. bstring expected " + std::to_string(n) + " more symbols");
+            static BError expected_string_open(std::string s) {
+                return BError("BString must start with an integer. Found symbol " + s);
+            }
+
+            static BError expected_string_symbols(std::string s,int n) {
+                return BError("Found end of stream. Parsed \"" + s + "\". Expecting " + std::to_string(n) + " more symbols");
+            }
+
+            static BError expected_string_delimiter(std::string s) {
+                return BError(std::string("Expected symbol ':', but got ") + s);
+            }
+
+            static BError invalid_input(std::string s) {
+                return BError("Invalid Input. Next symbol is " + s);
             }
 
             static BError generic_error(std::string m) {
