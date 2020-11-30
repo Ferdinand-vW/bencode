@@ -10,6 +10,5 @@ find_package(Boost 1.74.0)
 # Add source to this project's executable.
 add_executable (bencode_run ${SOURCES})
 add_library(bencode_lib STATIC ${SOURCES})
-# target_compile_features(bencode PRIVATE cxx_std_17)
 
-
+install(TARGETS bencode_lib DESTINATION lib)
