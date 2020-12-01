@@ -11,5 +11,4 @@ find_package(Boost 1.74.0)
 add_executable (bencode_run ${SOURCES})
 add_library(bencode_lib STATIC ${SOURCES})
 
-install(TARGETS bencode_lib DESTINATION lib)
-install(FILES ../include/bdata.h ../include/bdict.h ../include/bencode.h ../include/bint.h ../include/blist.h ../include/bstring.h ../include/btypes.h ../include/decode.h ../include/encode.h ../include/error.h ../include/utils.h DESTINATION include)
+install(TARGETS bencode_lib DESTINATION ${INSTALL_LIB_DIR})
