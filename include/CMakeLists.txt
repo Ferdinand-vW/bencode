@@ -12,4 +12,4 @@ set(INCLUDES
     utils.h
 )
 
-install(FILES ${INCLUDES} DESTINATION "${INSTALL_INCLUDE_DIR}/bencode")
+install(FILES ${INCLUDES} DESTINATION ${INSTALL_INCLUDE_DIR}/bencode)

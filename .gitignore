@@ -16,6 +16,7 @@
 # Build results
 [Dd]ebug/
 [Bb]uild/
+[Ii]nstall/
 [Dd]ebugPublic/
 .clangd/
 [Rr]elease/
