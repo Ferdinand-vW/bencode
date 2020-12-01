@@ -75,7 +75,7 @@ namespace bencode
 		string word;
 		char ch;
 		while (ss.peek() && n > 0 && !ss.eof()) { // peek is used to trigger eof bit
-			ss >> ch;
+			ch = ss.get(); // use get here because we want to also parse spaces
 			word.push_back(ch);
 			n--;
 		}
@@ -107,7 +107,7 @@ namespace bencode
 			return BErrorF::expected_int_end();
 		}
 		
-		ss >> ch;
+		ss >> ch; // parse e
 		try {
 			int n = boost::lexical_cast<int>(intstring);
 			return bint(n);

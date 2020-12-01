@@ -20,20 +20,20 @@ using namespace bencode;
 
 int main()
 {
-	stringstream test("i47434e4:testli56e5:yuioped3:cowi7856e4:spam4:eggse");
+	stringstream test("i47434e4:te tli56e5:yuioped3:cowi7856e4:spam4:eggse");
 
 	auto i = decode<bencode::bdata>(test);
 	if (i.has_value()) { cout << i.value() << endl; }
 	else   { cout << i.error().message() << endl; }
 
-	cout << encode(i.value()) << endl;;
+	cout << encode(i.value()) << endl;
 
 	auto t = decode<bencode::bdata>(test);
 	if (t.has_value()) 
 		   { cout << t.value() << endl; }
 	else   { cout << t.error().message() << endl; }
 
-	cout << encode(t.value()) << endl;;
+	cout << encode(t.value()) << endl;
 
 	auto l = decode<bdata>(test);
 	if (l.has_value()) 
