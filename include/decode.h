@@ -3,7 +3,6 @@
 #include <string>
 #include <map>
 #include <map>
-#include <sstream>
 #include "bstring.h"
 #include "bdict.h"
 #include "bint.h"
@@ -16,12 +15,12 @@ using namespace std;
 namespace bencode
 {
 	template<class T>
-	either<T> decode(stringstream& ss);
+	either<T> decode(istream& ss);
 	template<>
-	either<bdata> decode<bdata>(stringstream& ss);
+	either<bdata> decode<bdata>(istream& ss);
 
-	bool peek_bint(stringstream& ss);
-	bool peek_bstring(stringstream& ss);
-	bool peek_blist(stringstream& ss);
-	bool peek_bdict(stringstream& ss);
+	bool peek_bint(istream& ss);
+	bool peek_bstring(istream& ss);
+	bool peek_blist(istream& ss);
+	bool peek_bdict(istream& ss);
 }

@@ -27,60 +27,61 @@ using namespace std;
 
 namespace bencode
 {
-	bool peek_bint(stringstream& ss) {
-		char i = ss.peek();
+	bool peek_bint(istream& is) {
+		char i = is.peek();
 
 		return i == 'i';
 	}
 
 
-	bool peek_bstring(stringstream &ss) {
-		char s = ss.peek();
+	bool peek_bstring(istream &is) {
+		char s = is.peek();
 
 		return isdigit(s);
 	}
 
-	bool peek_blist(stringstream &ss) {
-		char l = ss.peek();
+	bool peek_blist(istream &is) {
+		char l = is.peek();
 
 		return l == 'l';
 	}
 
-	bool peek_bdict(stringstream& ss) {
-		char d = ss.peek();
+	bool peek_bdict(istream& is) {
+		char d = is.peek();
 
 		return d == 'd';
 	}
 
 	template<>
-	either<bstring> decode<bstring>(stringstream& ss) {
+	either<bstring> decode<bstring>(istream& is) {
 		string snum;
 		char d;
 
-		while(isdigit(ss.peek()) && !ss.eof()) { // build the int string
-			ss >> d;
+		while(isdigit(is.peek()) && !is.eof()) { // build the int string
+			is >> d;
 			snum+=d; 
 		}
 
 		int n = 0;
 		if (snum.length() > 0) { n = boost::lexical_cast<int>(snum); }
-		else if (ss.eof()) { return BErrorF::expected_string_open(""); }
-		else 		  	   { return BErrorF::expected_string_open(string(1,ss.peek())); }
+		else if (is.eof()) { return BErrorF::expected_string_open(""); }
+		else 		  	   { return BErrorF::expected_string_open(string(1,is.peek())); }
 
-		char del = ss.peek();
-		if (del == ':') { ss >> del; } // parse and throw away the delimiter
-		else if (ss.eof()) { return BErrorF::expected_string_delimiter(""); }
+		char del = is.peek();
+		if (del == ':') { is >> del; } // parse and throw away the delimiter
+		else if (is.eof()) { return BErrorF::expected_string_delimiter(""); }
 		else 		  	   { return BErrorF::expected_string_delimiter(string(1,del)); }
 		
 		string word;
 		char ch;
-		while (ss.peek() && n > 0 && !ss.eof()) { // peek is used to trigger eof bit
-			ch = ss.get(); // use get here because we want to also parse spaces
+		while (is.peek() && n > 0 && !is.eof()) { // peek is used to trigger eof bit
+			ch = is.get(); // read a byte
 			word.push_back(ch);
 			n--;
 		}
 
-		if (n > 0 && ss.eof()) {
+		//if end of stream reached but expecting more symbols
+		if (n > 0 && is.eof()) {
 			return BErrorF::expected_string_symbols(word,n);
 		}
 
@@ -88,9 +89,9 @@ namespace bencode
 	}
 	
 	template<>
-	either<bint> decode<bint>(stringstream& ss) {
+	either<bint> decode<bint>(istream& is) {
 		char i;
-		ss >> i;
+		is >> i;
 
 		if (i != 'i') {
 			return BErrorF::expected_int_open(i);
@@ -98,16 +99,16 @@ namespace bencode
 
 		string intstring;
 		char ch;
-		while (ss.peek() != 'e' && !ss.eof()) {
-			ss >> ch;
+		while (is.peek() != 'e' && !is.eof()) {
+			is >> ch;
 			intstring += ch;
 		}
 
-		if(ss.eof()) {
+		if(is.eof()) {
 			return BErrorF::expected_int_end();
 		}
 		
-		ss >> ch; // parse e
+		is >> ch; // parse e
 		try {
 			int n = boost::lexical_cast<int>(intstring);
 			return bint(n);
@@ -117,9 +118,9 @@ namespace bencode
 	}
 
 	template<>
-	either<blist> decode<blist>(stringstream& ss) {
+	either<blist> decode<blist>(istream& is) {
 		char l;
-		ss >> l;
+		is >> l;
 
 		if (l != 'l') {
 			return BErrorF::expected_list_open(l);
@@ -128,24 +129,24 @@ namespace bencode
 		vector<shared_ptr<bdata>> items;
 
 		// decode any additional items
-		while (ss.peek() != 'e' && !ss.eof()) {
-			auto item = decode<bdata>(ss);
+		while (is.peek() != 'e' && !is.eof()) {
+			auto item = decode<bdata>(is);
 			if (!item) { return item.error(); }
 			else { items.push_back(make_shared<bdata>(item.value())); }
 		}
 
-		if (ss.eof()) {
+		if (is.eof()) {
 			return BErrorF::expected_list_end();
 		}
-		ss >> l; // drop e
+		is >> l; // drop e
 
 		return blist(items);
 	}
 
 	template<>
-	either<bdict> decode<bdict>(stringstream& ss) {
+	either<bdict> decode<bdict>(istream& is) {
 		char d;
-		ss >> d;
+		is >> d;
 
 		if (d != 'd') {
 			return BErrorF::expected_dict_open(d);
@@ -153,11 +154,11 @@ namespace bencode
 
 		map<bstring,shared_ptr<bdata>> dict;
 
-		while(ss.peek() != 'e' && !ss.eof()) {
-			auto decodedKey = decode<bstring>(ss);
+		while(is.peek() != 'e' && !is.eof()) {
+			auto decodedKey = decode<bstring>(is);
 			if(!decodedKey) { return decodedKey.error(); } // abort with error
 
-			auto decodedValue = decode<bdata>(ss);
+			auto decodedValue = decode<bdata>(is);
 
 			if (!decodedValue) { return decodedValue.error(); }
 			else { 
@@ -168,42 +169,42 @@ namespace bencode
 			}
 		}
 
-		if (ss.eof()) {
+		if (is.eof()) {
 			return BErrorF::expected_dict_end();
 		}
 
-		ss >> d; // drop e
+		is >> d; // drop e
 
 		return bdict(dict);
 	}
 
 	template<>
-	either<bdata> decode<bdata>(stringstream& ss) {
+	either<bdata> decode<bdata>(istream& is) {
 
-		if(peek_bint(ss)) {
-			auto vint = decode<bint>(ss);
+		if(peek_bint(is)) {
+			auto vint = decode<bint>(is);
 			if (!vint) { return vint.error(); }
 			else 	   { return bdata(vint.value()); }
 			
-		} else if (peek_bstring(ss)) {
-			auto vstring = decode<bstring>(ss);
+		} else if (peek_bstring(is)) {
+			auto vstring = decode<bstring>(is);
 			if (!vstring) { return vstring.error(); }
 			else 		  { return bdata(vstring.value()); }
 
-		} else if (peek_blist(ss)) {
-			auto vlist = decode<blist>(ss);
+		} else if (peek_blist(is)) {
+			auto vlist = decode<blist>(is);
 			if (!vlist) { return vlist.error(); }
 			else 	    { return bdata(vlist.value()); }
 		
-		} else if (peek_bdict(ss)) {
-			auto vdict = decode<bdict>(ss);
+		} else if (peek_bdict(is)) {
+			auto vdict = decode<bdict>(is);
 			if (!vdict) { return vdict.error(); }
 			else 	    { return bdata(vdict.value()); }
 		
 		} else {
-			char c = ss.peek();
+			char c = is.peek();
 			std::string s;
-			if (ss.eof()) { s = ""; } else { s = to_string(c); }
+			if (is.eof()) { s = ""; } else { s = to_string(c); }
 			return BErrorF::invalid_input(s);
 		}
 	}
