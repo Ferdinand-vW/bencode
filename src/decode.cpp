@@ -71,17 +71,14 @@ namespace bencode
 		else if (is.eof()) { return BErrorF::expected_string_delimiter(""); }
 		else 		  	   { return BErrorF::expected_string_delimiter(string(1,del)); }
 		
-		string word;
-		char ch;
-		while (is.peek() && n > 0 && !is.eof()) { // peek is used to trigger eof bit
-			ch = is.get(); // read a byte
-			word.push_back(ch);
-			n--;
-		}
+		vector<char> buff(n); //create buffer of size n
+		is.read(&buff[0], n); // try to read n bytes
+		auto num = is.gcount(); // actual number of bytes read
+		string word (buff.begin(),buff.begin()+num); // copy the bytes into string
 
 		//if end of stream reached but expecting more symbols
-		if (n > 0 && is.eof()) {
-			return BErrorF::expected_string_symbols(word,n);
+		if (num < n) {
+			return BErrorF::expected_string_symbols(word,n - num);
 		}
 
 		return bstring(word);
