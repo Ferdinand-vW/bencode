@@ -1,9 +1,9 @@
-#include "bdata.h"
-#include "blist.h"
-#include "bint.h"
-#include "bdict.h"
-#include "bstring.h"
-#include "utils.h"
+#include "bencode/bdata.h"
+#include "bencode/blist.h"
+#include "bencode/bint.h"
+#include "bencode/bdict.h"
+#include "bencode/bstring.h"
+#include "bencode/utils.h"
 
 namespace bencode {
 

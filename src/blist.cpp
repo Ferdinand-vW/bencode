@@ -1,9 +1,9 @@
-#include "blist.h"
-#include "bstring.h"
-#include "bint.h"
-#include "bdict.h"
-#include "bdata.h"
-#include "utils.h"
+#include "bencode/blist.h"
+#include "bencode/bstring.h"
+#include "bencode/bint.h"
+#include "bencode/bdict.h"
+#include "bencode/bdata.h"
+#include "bencode/utils.h"
 
 namespace bencode {
     ostream& operator<<(ostream& os,const blist &bl) {

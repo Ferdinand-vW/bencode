@@ -1,14 +1,15 @@
-#include "encode.h"
-#include "btypes.h"
-#include "bint.h"
-#include "bstring.h"
-#include "blist.h"
-#include "bdict.h"
-#include "bdata.h"
-#include "utils.h"
 #include <algorithm>
 #include <variant>
 #include <string>
+
+#include "bencode/encode.h"
+#include "bencode/btypes.h"
+#include "bencode/bint.h"
+#include "bencode/bstring.h"
+#include "bencode/blist.h"
+#include "bencode/bdict.h"
+#include "bencode/bdata.h"
+#include "bencode/utils.h"
 
 namespace bencode {
 

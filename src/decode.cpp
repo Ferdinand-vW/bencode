@@ -12,16 +12,15 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include "error.h"
-#include "bdict.h"
-#include "bdata.h"
-#include "bstring.h"
-#include "bint.h"
-#include "blist.h"
-#include "btypes.h"
-#include "decode.h"
-#include "utils.h"
-#include "error.h"
+#include "bencode/error.h"
+#include "bencode/bdict.h"
+#include "bencode/bdata.h"
+#include "bencode/bstring.h"
+#include "bencode/bint.h"
+#include "bencode/blist.h"
+#include "bencode/btypes.h"
+#include "bencode/decode.h"
+#include "bencode/utils.h"
 
 using namespace std;
 

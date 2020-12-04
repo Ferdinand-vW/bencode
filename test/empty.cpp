@@ -1,10 +1,7 @@
 #define BOOST_TEST_MODULE Empty
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
-#include "encode.h"
-#include "decode.h"
-#include "btypes.h"
-#include "error.h"
+#include "bencode/bencode.h"
 
 using namespace bencode;
 

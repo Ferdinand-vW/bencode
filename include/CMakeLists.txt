@@ -1,15 +1,15 @@
 set(INCLUDES
-    bdata.h
-    bdict.h
-    bencode.h
-    bint.h
-    blist.h
-    bstring.h
-    btypes.h
-    decode.h
-    encode.h
-    error.h
-    utils.h
+    bencode/bdata.h
+    bencode/bdict.h
+    bencode/bencode.h
+    bencode/bint.h
+    bencode/blist.h
+    bencode/bstring.h
+    bencode/btypes.h
+    bencode/decode.h
+    bencode/encode.h
+    bencode/error.h
+    bencode/utils.h
 )
 
 install(FILES ${INCLUDES} DESTINATION ${INSTALL_INCLUDE_DIR}/bencode)

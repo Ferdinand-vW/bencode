@@ -1,19 +1,14 @@
 ﻿// bencode.cpp : Defines the entry point for the application.
 //
 
-#include "bencode.h"
-#include "bdict.h"
-#include "decode.h"
-#include "encode.h"
-#include "bstring.h"
+
 #include <algorithm>
 #include <ostream>
 #include <sstream>
 #include <string>
-#include "utils.h"
 #include <variant>
-#include "btypes.h"
-#include "bdata.h"
+
+#include "bencode/bencode.h"
 
 using namespace std;
 using namespace bencode;
