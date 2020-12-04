@@ -15,18 +15,18 @@ namespace bencode {
 
     template<>
     std::string encode<bint>(bint bi) {
-        return "i" + std::to_string(bi.get_internal()) + "e";
+        return "i" + std::to_string(bi.value()) + "e";
     }
 
     template<>
     std::string encode<bstring>(bstring bs) {
-        auto s = bs.get_internal();
+        auto s = bs.value();
         return std::to_string(s.length()) + ":" + s;
     }
 
     template<>
     std::string encode<bdict>(bdict bd) {
-        auto kvPtrs = bd.get_internal();
+        auto kvPtrs = bd.value();
         std::string s = "";
 
         for(auto kv : kvPtrs) {
@@ -37,7 +37,7 @@ namespace bencode {
 
     template<>
     std::string encode<blist>(blist bl) {
-        auto items = bl.get_internal();
+        auto items = bl.value();
         std::string s = "";
         for(auto i : items) {
             s += encode<bdata>(*i);
@@ -47,7 +47,7 @@ namespace bencode {
 
     template<>
     std::string encode<bdata>(bdata b) {
-        auto benc = b.get_internal();
+        auto benc = b.value();
         return 
             std::visit(overloaded { 
                 [](bint &bi) { return encode<bint>(bi); },

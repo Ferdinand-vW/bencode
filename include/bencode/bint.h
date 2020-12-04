@@ -12,10 +12,10 @@ namespace bencode {
 	public:
 		bint(int j) : i(j) {};
 
-		int get_internal() const { return i; }
+		int value() const { return i; }
 
 		friend ostream& operator<<(ostream& os, const bint& bi) {
-			os << bi.get_internal();
+			os << bi.value();
 
 			return os;
 		}

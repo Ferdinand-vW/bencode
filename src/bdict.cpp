@@ -8,7 +8,7 @@
 namespace bencode {
 
     ostream& operator<<(ostream& os, const bdict &bd) {
-        auto kvs = bd.get_internal();
+        auto kvs = bd.value();
         os << "{";
 
         bool first = true;
@@ -17,7 +17,7 @@ namespace bencode {
             if (first) { first = false; }
             else { os << ", "; } // add comma between items
 
-            os << kv.first.get_internal() + " => ";
+            os << kv.first.value() + " => ";
             os << (*kv.second);
         }
 

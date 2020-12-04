@@ -16,7 +16,7 @@ namespace bencode
 	public:
 		bdict(map<bstring, shared_ptr<bdata>> kv) : key_values(kv) {};
 
-		map<bstring, shared_ptr<bdata>> get_internal() const {
+		map<bstring, shared_ptr<bdata>> value() const {
 			return key_values;
 		}
 
