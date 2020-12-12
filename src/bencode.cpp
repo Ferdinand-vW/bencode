@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include <variant>
+#include "bencode/utils.h"
 
 #include "bencode/bencode.h"
 
@@ -16,11 +17,11 @@ using namespace bencode;
 int main()
 {
 	stringstream test("i47434e4:te tli56e5:yuioped3:cowi7856e4:spam4:eggse");
-
+	
 	auto i = decode<bencode::bdata>(test);
 	if (i.has_value()) { cout << i.value() << endl; }
 	else   { cout << i.error().message() << endl; }
-
+	
 	cout << encode(i.value()) << endl;
 
 	auto t = decode<bencode::bdata>(test);

@@ -14,7 +14,10 @@ namespace bencode {
 
         public:
             bencoding value() const { return *decoded; }
-            optional<bint> get_bint() const { return try_get<bint>(*decoded).get() }
+            optional<bint>    get_bint()    const { return try_get<bint>(*decoded.get()); }
+            optional<bstring> get_bstring() const { return try_get<bstring>(*decoded.get()); }
+            optional<blist>   get_blist()   const { return try_get<blist>(*decoded.get()); }
+            optional<bdict>   get_bdict()   const { return try_get<bdict>(*decoded.get()); }
 
             bdata (const bencoding &pd) : decoded(make_shared<bencoding>(pd)) {};
             bdata (const bint      &pd) : decoded(make_shared<bencoding>(pd)) {};
