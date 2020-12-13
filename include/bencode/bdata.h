@@ -25,6 +25,16 @@ namespace bencode {
             bdata (const blist     &pd) : decoded(make_shared<bencoding>(pd)) {};
             bdata (const bdict     &pd) : decoded(make_shared<bencoding>(pd)) {};
 
+            string display_type() {
+                auto v = *decoded.get();
+                return std::visit(overloaded { 
+                    [](bint &bi) { return "bint"; },
+                    [](bstring &bs) { return "bstring"; },
+                    [](bdict &bd) { return "bdict"; },
+                    [](blist &bl) { return "blist"; }
+                    },v);
+            }
+
             friend ostream& operator<<(ostream& os,const bdata &bd);
     };
 }
