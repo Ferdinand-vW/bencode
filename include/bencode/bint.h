@@ -14,10 +14,7 @@ namespace bencode {
 
 		int value() const { return i; }
 
-		friend ostream& operator<<(ostream& os, const bint& bi) {
-			os << bi.value();
-
-			return os;
-		}
+		void traverse(function<void(bencoding_prim)> f);
+		friend ostream& operator<<(ostream& os, const bint& bi);
 	};
 }

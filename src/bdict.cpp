@@ -11,9 +11,10 @@ namespace bencode {
         return "bdict";
     }
 
-    void bdict::traverse(function<void(bencoding)> f) {
+    void bdict::traverse(function<void(bencoding_prim)> f) {
         for(auto kvp : key_values) {
-            f(kvp.first);
+            std::pair<bstring,bdata> p(kvp.first, *kvp.second.get());
+            f(p);
             kvp.second.get()->traverse(f);
         }
     }

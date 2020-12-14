@@ -2,14 +2,7 @@
 #include <variant>
 #include <string>
 
-#include "bencode/encode.h"
-#include "bencode/btypes.h"
-#include "bencode/bint.h"
-#include "bencode/bstring.h"
-#include "bencode/blist.h"
-#include "bencode/bdict.h"
-#include "bencode/bdata.h"
-#include "bencode/utils.h"
+#include "bencode/bencode.h"
 
 namespace bencode {
 

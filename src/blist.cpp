@@ -1,14 +1,10 @@
-#include "bencode/blist.h"
-#include "bencode/bstring.h"
-#include "bencode/bint.h"
-#include "bencode/bdict.h"
-#include "bencode/bdata.h"
-#include "bencode/utils.h"
+#include "bencode/bencode.h"
 
 namespace bencode {
-    void blist::traverse(function<void(bencoding)> f) {
+    void blist::traverse(function<void(bencoding_prim)> f) {
         for(auto i_ptr : items) {
             auto i_val = *i_ptr.get();
+            f(i_val);
             i_val.traverse(f);
         }
     }

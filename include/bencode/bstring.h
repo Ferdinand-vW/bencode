@@ -1,5 +1,6 @@
 #pragma once
 
+#include "btypes.h"
 #include <string>
 #include <sstream>
 
@@ -14,14 +15,8 @@ namespace bencode {
 
 		string value() const { return s; }
 
-		friend ostream& operator<<(ostream& os, bstring& bs) {
-			os << bs.value();
-
-			return os;
-		}
-			
-		friend bool operator<(bstring b1,bstring b2) {
-			return b1.value() < b2.value();
-		}
+		void traverse(function<void(bencoding_prim)> f);
+		friend ostream& operator<<(ostream& os, bstring& bs);
+		friend bool operator<(bstring b1,bstring b2);
 	};
 }

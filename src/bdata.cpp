@@ -1,5 +1,4 @@
 #include <variant>
-#include "bencode/blist.h"
 #include "bencode/bencode.h"
 
 namespace bencode {
@@ -14,12 +13,11 @@ namespace bencode {
 			},v);
 	}
 
-	void bdata::traverse(function<void(bencoding)> f,function<void(flat_bencoding)> g) {
+	void bdata::traverse(function<void(bencoding_prim)> f) {
         auto b = *decoded.get();
-		f(b);
 		std::visit(overloaded {
-			[](bint &bi)    { g(bi); },
-			[](bstring &bs) { g(bi); },
+			[f](bint &bi)    { bi.traverse(f); },
+			[f](bstring &bs) { bs.traverse(f); },
 			[f](blist &bl)  { bl.traverse(f); },
 			[f](bdict &bd)  { bd.traverse(f); },
 		}, b);

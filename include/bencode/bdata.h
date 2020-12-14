@@ -26,7 +26,7 @@ namespace bencode {
             bdata (const bdict     &pd) : decoded(make_shared<bencoding>(pd)) {};
 
             string display_type();
-            void traverse(function<void(bencoding)> f);
+            void traverse(function<void(bencoding_prim)> f);
 
             friend ostream& operator<<(ostream& os,const bdata &bd);
     };

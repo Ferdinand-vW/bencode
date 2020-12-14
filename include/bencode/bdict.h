@@ -21,7 +21,7 @@ namespace bencode
 		}
 
 		string display_type();
-		void traverse(function<void(bencoding)> f);
+		void traverse(function<void(bencoding_prim)> f);
 
 
 		friend ostream& operator<<(ostream& os, const bdict &bd);
