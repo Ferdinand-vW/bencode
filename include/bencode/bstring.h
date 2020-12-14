@@ -22,7 +22,6 @@ namespace bencode {
 			
 		friend bool operator<(bstring b1,bstring b2) {
 			return b1.value() < b2.value();
-		}	
-
+		}
 	};
 }

@@ -4,11 +4,6 @@
 #include <variant>
 #include <functional>
 #include "iostream"
-#include "btypes.h"
-#include "bdict.h"
-#include "blist.h"
-#include "bint.h"
-#include "bstring.h"
 
 using namespace std;
 
@@ -24,6 +19,27 @@ namespace bencode {
 		}
 		else { return {}; }
 	}
+
+	// template <class A>
+	// void traverse(bint bi, function<void(bencoding)> f) {
+	// 	f(bi);
+	// }
+
+	// template <class A>
+	// void traverse(bstring bs, function<void(bencoding)> f) {
+	// 	f(bs);
+	// }
+
+	// void traverse(bdict bd, function<void(bencoding)> f) {
+	// 	f(bd);
+
+	// 	auto mp = bd.value();
+	// 	for(auto kvp : mp) {
+	// 		auto bdat = *kvp.second.get();
+	// 		f(bdat.value());
+	// 	}
+
+	// }
 
 	// optional<std::enable_if_t< !std::is_same< A, bool >::value, A >> 
 }

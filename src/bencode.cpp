@@ -3,6 +3,7 @@
 
 
 #include <algorithm>
+#include <optional>
 #include <ostream>
 #include <sstream>
 #include <string>
@@ -16,12 +17,25 @@ using namespace bencode;
 
 int main()
 {
-	stringstream test("i47434e4:te tli56e5:yuioped3:cowi7856e4:spam4:eggse");
+	stringstream test("d3:cowi7856e4:spam4:eggse");
 	
 	auto i = decode<bencode::bdata>(test);
-	if (i.has_value()) { cout << i.value() << endl; }
-	else   { cout << i.error().message() << endl; }
-	
+	// if (i.has_value()) { cout << i.value() << endl; }
+	// else   { cout << i.error().message() << endl; }
+	auto f = [](auto v) { std::visit(overloaded {
+		[](bint &bi) { cout << bi << endl; },
+		[](bstring &bs) { cout << bs << endl; },
+		[](blist &bl) { },
+		[](bdict &bd) {  }
+		} , v); };
+
+	auto g = [](auto v) { std::visit(overloaded {
+		[](bint &bi) { return bi; },
+		[](bstring &bs) { return bs; },
+		[](bdata &bd) { return optional<bdata>(); },
+		[](pair<bstring,bdata> &bp) { return bp.first; }
+		}, v); };
+	i.value().traverse(f,g);
 	cout << encode(i.value()) << endl;
 
 	auto t = decode<bencode::bdata>(test);

@@ -6,6 +6,13 @@
 #include "bencode/utils.h"
 
 namespace bencode {
+    void blist::traverse(function<void(bencoding)> f) {
+        for(auto i_ptr : items) {
+            auto i_val = *i_ptr.get();
+            i_val.traverse(f);
+        }
+    }
+
     ostream& operator<<(ostream& os,const blist &bl) {
         auto items = bl.value();
         os << "[";

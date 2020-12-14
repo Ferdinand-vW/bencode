@@ -19,6 +19,7 @@ namespace bencode {
     class bdict;
     class bdata;
     typedef variant<bint,bstring,blist,bdict> bencoding;
+    typedef variant<bint,bstring,bdata,pair<bstring,bdata>> flat_bencoding;
 
     template<class T,class E = BError>
     using either = checked<T,E>;

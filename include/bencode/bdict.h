@@ -20,6 +20,10 @@ namespace bencode
 			return key_values;
 		}
 
+		string display_type();
+		void traverse(function<void(bencoding)> f);
+
+
 		friend ostream& operator<<(ostream& os, const bdict &bd);
 	};
 }

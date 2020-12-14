@@ -7,6 +7,17 @@
 
 namespace bencode {
 
+    string bdict::display_type() {
+        return "bdict";
+    }
+
+    void bdict::traverse(function<void(bencoding)> f) {
+        for(auto kvp : key_values) {
+            f(kvp.first);
+            kvp.second.get()->traverse(f);
+        }
+    }
+
     ostream& operator<<(ostream& os, const bdict &bd) {
         auto kvs = bd.value();
         os << "{";
