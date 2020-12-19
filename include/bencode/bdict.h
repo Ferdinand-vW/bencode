@@ -23,6 +23,7 @@ namespace bencode
 		vector<shared_ptr<bdata>> values() const;
 		vector<bstring> keys() const;
 		string display_type() const;
+		shared_ptr<bdata> at(const string &s);
 
 		friend ostream& operator<<(ostream&, const bdict&);
 	};

@@ -27,6 +27,11 @@ namespace bencode {
         return vec;
     }
 
+    shared_ptr<bdata> bdict::at(const string &s) {
+        bstring bs(s);
+        return kvs.at(s);
+    }
+
     ostream& operator<<(ostream& os, const bdict &bd) {
         auto kvs = bd.key_values();
         os << "{";
