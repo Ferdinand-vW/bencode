@@ -6,24 +6,24 @@
 #include <iostream>
 #include <sstream>
 #include "btypes.h"
+// #include "binterface.h"
 
 using namespace std;
 
 namespace bencode
 {
 	class bdict {
-		map<bstring, shared_ptr<bdata>> key_values;
+		map<bstring, shared_ptr<bdata>> kvs;
 	public:
-		bdict(map<bstring, shared_ptr<bdata>> kv) : key_values(kv) {};
+		bdict(map<bstring, shared_ptr<bdata>> kv) : kvs(kv) {};
 
-		map<bstring, shared_ptr<bdata>> value() const {
-			return key_values;
+		map<bstring, shared_ptr<bdata>> key_values() const {
+			return kvs;
 		}
+		vector<shared_ptr<bdata>> values() const;
+		vector<bstring> keys() const;
+		string display_type() const;
 
-		string display_type();
-		void traverse(function<void(bencoding_prim)> f);
-
-
-		friend ostream& operator<<(ostream& os, const bdict &bd);
+		friend ostream& operator<<(ostream&, const bdict&);
 	};
 }

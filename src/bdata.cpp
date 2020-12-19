@@ -1,5 +1,6 @@
 #include <variant>
 #include "bencode/bencode.h"
+#include "bencode/btypes.h"
 
 namespace bencode {
 
@@ -12,23 +13,6 @@ namespace bencode {
 			[](blist &bl) { return "blist"; }
 			},v);
 	}
-
-	void bdata::traverse(function<void(bencoding_prim)> f) {
-        auto b = *decoded.get();
-		std::visit(overloaded {
-			[f](bint &bi)    { bi.traverse(f); },
-			[f](bstring &bs) { bs.traverse(f); },
-			[f](blist &bl)  { bl.traverse(f); },
-			[f](bdict &bd)  { bd.traverse(f); },
-		}, b);
-    }
-
-	        //     std::visit(overloaded { 
-            //     [](bint &bi) { return encode<bint>(bi); },
-            //     [](bstring &bs) { return encode<bstring>(bs); },
-            //     [](bdict &bd) { return encode<bdict>(bd); },
-            //     [](blist &bl) { return encode<blist>(bl); }
-            // },benc);
 
     ostream& operator<<(ostream &os,const bdata &bd) {
 		auto benc = bd.value();

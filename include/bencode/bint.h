@@ -2,6 +2,7 @@
 
 #include <ostream>
 #include "btypes.h"
+// #include "binterface.h"
 
 using namespace std;
 
@@ -14,7 +15,8 @@ namespace bencode {
 
 		int value() const { return i; }
 
-		void traverse(function<void(bencoding_prim)> f);
-		friend ostream& operator<<(ostream& os, const bint& bi);
+		string display_type();
+
+		friend ostream& operator<<(ostream&, const bint&);
 	};
 }

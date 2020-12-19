@@ -17,25 +17,16 @@
 using namespace std;
 using namespace bencode;
 
+template <class T>
+void print_val(const T &t) {
+	cout << "val: " << t << endl;
+}
+
 int main()
 {
 	stringstream test("d3:cowi7856e4:spam4:eggse");
 	
 	auto i = decode<bencode::bdata>(test);
-	// if (i.has_value()) { cout << i.value() << endl; }
-	// else   { cout << i.error().message() << endl; }
-	bdata bdat = i.value();
-	
-	auto f = [](auto v) { 
-		std::visit(overloaded {
-			[](int &i)    { cout << "val: " << i << endl;},
-			[](string &s) { cout << "val: " << s << endl;},
-			[](bdata &bd) {return;},
-			[](auto &p)   { cout << "key: " << p.first << endl; }
-			}, v); 
-		};
-	bdat.traverse(f);
-
 	cout << encode(i.value()) << endl;
 
 	return 0;

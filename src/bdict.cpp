@@ -4,23 +4,31 @@
 #include "bencode/bdict.h"
 #include "bencode/bstring.h"
 #include "bencode/utils.h"
+#include <memory>
 
 namespace bencode {
 
-    string bdict::display_type() {
+    string bdict::display_type() const {
         return "bdict";
     }
 
-    void bdict::traverse(function<void(bencoding_prim)> f) {
-        for(auto kvp : key_values) {
-            std::pair<bstring,bdata> p(kvp.first, *kvp.second.get());
-            f(p);
-            kvp.second.get()->traverse(f);
+    vector<bstring> bdict::keys() const {
+        vector<bstring> vec;
+        for(auto &kvp : kvs) {
+            vec.push_back(kvp.first);
         }
+        return vec;
+	}
+    vector<shared_ptr<bdata>> bdict::values() const {
+        vector<shared_ptr<bdata>> vec;
+        for(auto &kvp : kvs) {
+            vec.push_back(kvp.second);
+        }
+        return vec;
     }
 
     ostream& operator<<(ostream& os, const bdict &bd) {
-        auto kvs = bd.value();
+        auto kvs = bd.key_values();
         os << "{";
 
         bool first = true;

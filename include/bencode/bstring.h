@@ -15,7 +15,6 @@ namespace bencode {
 
 		string value() const { return s; }
 
-		void traverse(function<void(bencoding_prim)> f);
 		friend ostream& operator<<(ostream& os, bstring& bs);
 		friend bool operator<(bstring b1,bstring b2);
 	};

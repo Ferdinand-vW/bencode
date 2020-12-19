@@ -19,7 +19,7 @@ namespace bencode {
 
     template<>
     std::string encode<bdict>(bdict bd) {
-        auto kvPtrs = bd.value();
+        auto kvPtrs = bd.key_values();
         std::string s = "";
 
         for(auto kv : kvPtrs) {

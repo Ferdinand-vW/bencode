@@ -3,6 +3,7 @@
 #include <ostream>
 #include <vector>
 #include "btypes.h"
+// #include "binterface.h"
 
 using namespace std;
 
@@ -15,8 +16,7 @@ namespace bencode {
 		vector<shared_ptr<bdata>> value() const { return items; }
 
 		string display_type();
-		void traverse(function<void(bencoding_prim)> f);
-
+		
 		friend ostream& operator<<(ostream& os, const blist &bl);
 	};
 }

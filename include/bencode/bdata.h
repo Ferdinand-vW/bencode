@@ -1,12 +1,14 @@
 #pragma once
 
 #include <memory>
+#include <variant>
 #include "btypes.h"
 #include "bint.h"
 #include "bstring.h"
 #include "blist.h"
 #include "bdict.h"
 #include "utils.h"
+// #include "binterface.h"
 
 namespace bencode {
     class bdata {
@@ -26,8 +28,7 @@ namespace bencode {
             bdata (const bdict     &pd) : decoded(make_shared<bencoding>(pd)) {};
 
             string display_type();
-            void traverse(function<void(bencoding_prim)> f);
 
-            friend ostream& operator<<(ostream& os,const bdata &bd);
+            friend ostream& operator<<(ostream&,const bdata&);
     };
 }
