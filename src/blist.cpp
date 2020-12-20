@@ -1,6 +1,9 @@
 #include "bencode/bencode.h"
 
 namespace bencode {
+    string blist::display_type() {
+        return "blist";
+    }
 
     ostream& operator<<(ostream& os,const blist &bl) {
         auto items = bl.value();

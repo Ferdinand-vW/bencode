@@ -1,6 +1,9 @@
 #include "bencode/bencode.h"
 
 namespace bencode {
+    string bstring::display_type() {
+        return "bstring";
+    }
 
     ostream& operator<<(ostream& os, bstring& bs) {
         os << bs.value();

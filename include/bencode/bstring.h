@@ -11,8 +11,9 @@ namespace bencode {
 	class bstring {
 		string s;
 	public:
-			bstring(string ss) : s(ss) {};
+		bstring(string ss) : s(ss) {};
 
+		string display_type();
 		string value() const { return s; }
 
 		friend ostream& operator<<(ostream& os, bstring& bs);
