@@ -5,6 +5,7 @@
 #include "bencode/bstring.h"
 #include "bencode/utils.h"
 #include <memory>
+#include <optional>
 
 namespace bencode {
 
@@ -30,6 +31,16 @@ namespace bencode {
     shared_ptr<bdata> bdict::at(const string &s) {
         bstring bs(s);
         return kvs.at(s);
+    }
+
+    optional<shared_ptr<bdata>> bdict::find(const string &s) {
+        bstring bs(s);
+        auto v_it = kvs.find(s);
+        if(v_it != kvs.end()) {
+            return v_it->second;
+        } else {
+            return {};
+        }
     }
 
     ostream& operator<<(ostream& os, const bdict &bd) {

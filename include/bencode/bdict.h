@@ -24,6 +24,7 @@ namespace bencode
 		vector<bstring> keys() const;
 		string display_type() const;
 		shared_ptr<bdata> at(const string &s);
+		optional<shared_ptr<bdata>> find(const string &s);
 
 		friend ostream& operator<<(ostream&, const bdict&);
 	};
