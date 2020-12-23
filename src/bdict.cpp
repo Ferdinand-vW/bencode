@@ -28,12 +28,12 @@ namespace bencode {
         return vec;
     }
 
-    shared_ptr<bdata> bdict::at(const string &s) {
+    shared_ptr<bdata> bdict::at(const string &s) const {
         bstring bs(s);
         return kvs.at(s);
     }
 
-    optional<shared_ptr<bdata>> bdict::find(const string &s) {
+    optional<shared_ptr<bdata>> bdict::find(const string &s) const {
         bstring bs(s);
         auto v_it = kvs.find(s);
         if(v_it != kvs.end()) {
