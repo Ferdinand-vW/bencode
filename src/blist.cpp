@@ -12,7 +12,7 @@ namespace bencode {
         for (const auto item : items) {
             if (first) { first = false; }
             else { os << ", "; }
-            os << (*item);
+            os << item;
         }
 
         os << "]";

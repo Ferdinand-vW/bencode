@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+#include <memory>
 #include <ostream>
 #include <vector>
 #include "btypes.h"
@@ -9,11 +11,11 @@ using namespace std;
 
 namespace bencode {
 	class blist {
-		vector<shared_ptr<bdata>> items;
+		vector<bdata> items;
 
 	public:
-		blist(vector<shared_ptr<bdata>> _items) : items(_items) {};
-		vector<shared_ptr<bdata>> value() const { return items; }
+		blist(vector<bdata> _items) : items(_items) {};
+		vector<bdata> value() const { return items; }
 
 		string display_type();
 		

@@ -19,11 +19,11 @@ namespace bencode {
 
     template<>
     std::string encode<bdict>(bdict bd) {
-        auto kvPtrs = bd.key_values();
+        auto kvs = bd.key_values();
         std::string s = "";
 
-        for(auto kv : kvPtrs) {
-            s += encode<bstring>(kv.first) + encode<bdata>(*kv.second); 
+        for(auto kv : kvs) {
+            s += encode<bstring>(kv.first) + encode<bdata>(kv.second); 
         }
         return "d" + s + "e";
     }
@@ -33,7 +33,7 @@ namespace bencode {
         auto items = bl.value();
         std::string s = "";
         for(auto i : items) {
-            s += encode<bdata>(*i);
+            s += encode<bdata>(i);
         }
         return "l" + s + "e"; 
     }

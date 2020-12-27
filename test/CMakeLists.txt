@@ -10,14 +10,16 @@ add_definitions( -DBOOST_ALL_DYN_LINK )
 
 include_directories(include)
 
-add_executable(Empty empty.cpp)
-add_test(NAME bstring_empty COMMAND Empty)
-target_link_libraries(Empty bencode_lib ${Boost_LIBRARIES})
+add_executable(empty empty.cpp)
+add_test(NAME bencode_empty COMMAND empty)
+target_link_libraries(empty bencode_lib ${Boost_LIBRARIES})
 
-add_executable(Identity identity.cpp)
-add_test(NAME bencode_identity COMMAND Identity)
-target_link_libraries(Identity bencode_lib ${Boost_LIBRARIES})
+add_executable(identity identity.cpp)
+add_test(NAME bencode_identity COMMAND identity)
+target_link_libraries(identity bencode_lib ${Boost_LIBRARIES})
 
-add_executable(Error error.cpp)
-add_test(NAME bencode_error COMMAND Error)
-target_link_libraries(Error bencode_lib ${Boost_LIBRARIES})
+add_executable(error error.cpp)
+add_test(NAME bencode_error COMMAND error)
+target_link_libraries(error bencode_lib ${Boost_LIBRARIES})
+
+add_dependencies(build_tests empty identity error)

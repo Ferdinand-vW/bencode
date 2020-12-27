@@ -11,6 +11,10 @@ set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "default insta
 set(INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
 set(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 
+add_custom_target(build_tests)
+add_custom_target(run_tests COMMAND ${CMAKE_CTEST_COMMAND})
+add_dependencies(run_tests build_tests)
+
 include_directories(include)
 add_subdirectory(src)
 add_subdirectory(include)

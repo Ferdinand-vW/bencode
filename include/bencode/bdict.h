@@ -13,18 +13,18 @@ using namespace std;
 namespace bencode
 {
 	class bdict {
-		map<bstring, shared_ptr<bdata>> kvs;
+		map<bstring, bdata> kvs;
 	public:
-		bdict(map<bstring, shared_ptr<bdata>> kv) : kvs(kv) {};
+		bdict(map<bstring, bdata> kv) : kvs(kv) {};
 
-		map<bstring, shared_ptr<bdata>> key_values() const {
+		map<bstring, bdata> key_values() const {
 			return kvs;
 		}
-		vector<shared_ptr<bdata>> values() const;
+		vector<bdata> values() const;
 		vector<bstring> keys() const;
 		string display_type() const;
-		shared_ptr<bdata> at(const string &s) const;
-		optional<shared_ptr<bdata>> find(const string &s) const;
+		bdata at(const string &s) const;
+		optional<bdata> find(const string &s) const;
 
 		friend ostream& operator<<(ostream&, const bdict&);
 	};

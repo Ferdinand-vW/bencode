@@ -122,13 +122,13 @@ namespace bencode
 			return BErrorF::expected_list_open(l);
 		}
 
-		vector<shared_ptr<bdata>> items;
+		vector<bdata> items;
 
 		// decode any additional items
 		while (is.peek() != 'e' && !is.eof()) {
 			auto item = decode<bdata>(is);
 			if (!item) { return item.error(); }
-			else { items.push_back(make_shared<bdata>(item.value())); }
+			else { items.push_back(item.value()); }
 		}
 
 		if (is.eof()) {
@@ -148,7 +148,7 @@ namespace bencode
 			return BErrorF::expected_dict_open(d);
 		}
 
-		map<bstring,shared_ptr<bdata>> dict;
+		map<bstring,bdata> dict;
 
 		while(is.peek() != 'e' && !is.eof()) {
 			auto decodedKey = decode<bstring>(is);
@@ -161,7 +161,7 @@ namespace bencode
 				bstring key = decodedKey.value();
 				bdata val   = decodedValue.value();
 				
-				dict.insert({key,make_shared<bdata>(val) }); 
+				dict.insert({key,val}); 
 			}
 		}
 

@@ -20,20 +20,20 @@ namespace bencode {
         }
         return vec;
 	}
-    vector<shared_ptr<bdata>> bdict::values() const {
-        vector<shared_ptr<bdata>> vec;
+    vector<bdata> bdict::values() const {
+        vector<bdata> vec;
         for(auto &kvp : kvs) {
             vec.push_back(kvp.second);
         }
         return vec;
     }
 
-    shared_ptr<bdata> bdict::at(const string &s) const {
+    bdata bdict::at(const string &s) const {
         bstring bs(s);
         return kvs.at(s);
     }
 
-    optional<shared_ptr<bdata>> bdict::find(const string &s) const {
+    optional<bdata> bdict::find(const string &s) const {
         bstring bs(s);
         auto v_it = kvs.find(s);
         if(v_it != kvs.end()) {
@@ -54,7 +54,7 @@ namespace bencode {
             else { os << ", "; } // add comma between items
 
             os << kv.first.value() + " => ";
-            os << (*kv.second);
+            os << kv.second;
         }
 
         os << "}";
