@@ -25,6 +25,9 @@ namespace bencode
 		string display_type() const;
 		bdata at(const string &s) const;
 		optional<bdata> find(const string &s) const;
+		void merge(const bdict &bd) {
+			kvs.merge(bd.key_values());
+		}
 
 		friend ostream& operator<<(ostream&, const bdict&);
 	};
