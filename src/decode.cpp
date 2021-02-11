@@ -106,7 +106,7 @@ namespace bencode
 		
 		is >> ch; // parse e
 		try {
-			int n = boost::lexical_cast<int>(intstring);
+			int n = boost::lexical_cast<long long>(intstring);
 			return bint(n);
 		} catch (...) {
 			return BErrorF::conversion_to_int(intstring);

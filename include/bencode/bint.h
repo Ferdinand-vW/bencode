@@ -9,11 +9,11 @@ using namespace std;
 namespace bencode {
 
 	class bint {
-		int i;
+		long long i;
 	public:
-		bint(int j) : i(j) {};
+		bint(long long j) : i(j) {};
 
-		int value() const { return i; }
+		long long value() const { return i; }
 
 		string display_type();
 
