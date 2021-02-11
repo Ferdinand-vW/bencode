@@ -22,4 +22,8 @@ add_executable(error error.cpp)
 add_test(NAME bencode_error COMMAND error)
 target_link_libraries(error bencode_lib ${Boost_LIBRARIES})
 
-add_dependencies(build_tests empty identity error)
+add_executable(bsort bsort.cpp)
+add_test(NAME bencode_sort COMMAND bsort)
+target_link_libraries(bsort bencode_lib ${Boost_LIBRARIES})
+
+add_dependencies(build_tests empty identity error bsort)

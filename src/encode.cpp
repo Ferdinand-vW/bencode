@@ -20,11 +20,22 @@ namespace bencode {
     template<>
     std::string encode<bdict>(bdict bd) {
         auto kvs = bd.key_values();
-        std::string s = "";
+        std::vector<std::string> entries;
 
+        // encode the elements of a bdict type
         for(auto kv : kvs) {
-            s += encode<bstring>(kv.first) + encode<bdata>(kv.second); 
+            entries.push_back(encode<bstring>(kv.first) + encode<bdata>(kv.second)); 
         }
+        
+        // sort elements
+        sort(entries.begin(),entries.end());
+
+        string s("");
+        for(auto e : entries) {
+            s += e;
+        }
+
+
         return "d" + s + "e";
     }
 
