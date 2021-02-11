@@ -7,7 +7,7 @@ using namespace bencode;
 
 BOOST_AUTO_TEST_CASE(bdict_is_sorted)
 {
-  std::string s = "d1:ai1e3:cefi0ee";
+  std::string s = "d3:abci1e1:ci0ee";
   stringstream ss(s);
   auto dec = decode<bdict>(ss);
   auto enc = encode<bdict>(dec.value());
