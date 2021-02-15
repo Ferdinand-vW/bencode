@@ -81,7 +81,7 @@ namespace bencode
 			return BErrorF::expected_string_symbols(word,n - num);
 		}
 
-		return bstring(word);
+		return bstring(buff);
 	}
 	
 	template<>

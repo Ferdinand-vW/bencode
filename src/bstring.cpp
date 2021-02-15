@@ -6,7 +6,7 @@ namespace bencode {
     }
 
     ostream& operator<<(ostream& os, bstring& bs) {
-        os << bs.value();
+        os << bs.to_string();
 
         return os;
     }

@@ -29,13 +29,13 @@ namespace bencode {
     }
 
     bdata bdict::at(const string &s) const {
-        bstring bs(s);
-        return kvs.at(s);
+        bstring bs(vector<char>(s.begin(),s.end()));
+        return kvs.at(bs);
     }
 
     optional<bdata> bdict::find(const string &s) const {
-        bstring bs(s);
-        auto v_it = kvs.find(s);
+        bstring bs(vector<char>(s.begin(),s.end()));
+        auto v_it = kvs.find(bs);
         if(v_it != kvs.end()) {
             return v_it->second;
         } else {
@@ -61,7 +61,7 @@ namespace bencode {
             if (first) { first = false; }
             else { os << ", "; } // add comma between items
 
-            os << kv.first.value() + " => ";
+            os << kv.first.to_string() + " => ";
             os << kv.second;
         }
 

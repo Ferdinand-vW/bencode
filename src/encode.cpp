@@ -14,7 +14,7 @@ namespace bencode {
     template<>
     std::string encode<bstring>(bstring bs) {
         auto s = bs.value();
-        return std::to_string(s.length()) + ":" + s;
+        return std::to_string(s.size()) + ":" + bs.to_string();
     }
 
     template<>

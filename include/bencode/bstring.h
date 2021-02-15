@@ -9,12 +9,13 @@ using namespace std;
 namespace bencode {
 
 	class bstring {
-		string s;
+		vector<char> s;
 	public:
-		bstring(string ss) : s(ss) {};
+		bstring(vector<char> ss) : s(ss) {};
 
 		string display_type();
-		string value() const { return s; }
+		vector<char> value() const { return s; }
+		string to_string() const { return string(s.begin(),s.end()); }
 
 		friend ostream& operator<<(ostream& os, bstring& bs);
 		friend bool operator<(bstring b1,bstring b2);
