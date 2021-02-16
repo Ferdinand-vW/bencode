@@ -15,7 +15,7 @@ namespace bencode {
 		bstring(vector<char> vs) : v(vs) {};
 		bstring(string s) {
 			v.reserve(s.size());
-			std::copy(s.begin(),s.end(),v.begin());
+			std::copy(s.begin(),s.end(),back_inserter(v));
 		 }
 
 		string display_type();
