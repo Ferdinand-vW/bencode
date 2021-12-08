@@ -15,8 +15,8 @@ namespace bencode {
 
 		long long value() const { return i; }
 
-		string display_type();
+		std::string display_type();
 
-		friend ostream& operator<<(ostream&, const bint&);
+		friend std::ostream& operator<<(std::ostream&, const bint&);
 	};
 }

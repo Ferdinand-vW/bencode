@@ -4,8 +4,8 @@
 #include "bdata.h"
 namespace bencode {
     template <class T>
-    std::string encode(T t);
+    std::string encode(const T& t);
 
     template<>
-    std::string encode<bdata>(bdata bd);
+    std::string encode<bdata>(const bdata &bd);
 }

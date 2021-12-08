@@ -1,11 +1,11 @@
 #include "bencode/bencode.h"
 
 namespace bencode {
-    string bstring::display_type() {
+    std::string bstring::display_type() {
         return "bstring";
     }
 
-    ostream& operator<<(ostream& os, bstring& bs) {
+    std::ostream& operator<<(std::ostream& os,const bstring& bs) {
         os << bs.to_string();
 
         return os;

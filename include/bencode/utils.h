@@ -12,10 +12,10 @@ namespace bencode {
 	template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
 	template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
-	template <class A,class... As>
-	optional<A> try_get(variant<As...> v) {
-		if (holds_alternative<A>(v)) {
-			return get<A>(v);
+	template <typename A,typename T>
+	optional<A> try_get(T&& v) {
+		if (holds_alternative<A>(std::forward<T>(v))) {
+			return get<A>(std::forward<T>(v));
 		}
 		else { return {}; }
 	}

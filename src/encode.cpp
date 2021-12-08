@@ -7,19 +7,19 @@
 namespace bencode {
 
     template<>
-    std::string encode<bint>(bint bi) {
+    std::string encode<bint>(const bint &bi) {
         return "i" + std::to_string(bi.value()) + "e";
     }
 
     template<>
-    std::string encode<bstring>(bstring bs) {
+    std::string encode<bstring>(const bstring &bs) {
         auto s = bs.value();
         return std::to_string(s.size()) + ":" + bs.to_string();
     }
 
     template<>
-    std::string encode<bdict>(bdict bd) {
-        auto kvs = bd.key_values();
+    std::string encode<bdict>(const bdict &bd) {
+        auto& kvs = bd.key_values();
         vector<pair<bstring,bdata>> entries (kvs.begin(),kvs.end());
         
         // sort elements by key
@@ -36,8 +36,8 @@ namespace bencode {
     }
 
     template<>
-    std::string encode<blist>(blist bl) {
-        auto items = bl.value();
+    std::string encode<blist>(const blist &bl) {
+        auto& items = bl.value();
         std::string s = "";
         for(auto i : items) {
             s += encode<bdata>(i);
@@ -46,14 +46,14 @@ namespace bencode {
     }
 
     template<>
-    std::string encode<bdata>(bdata b) {
-        auto benc = b.value();
+    std::string encode<bdata>(const bdata &b) {
+        auto& benc = b.value();
         return 
             std::visit(overloaded { 
-                [](bint &bi) { return encode<bint>(bi); },
-                [](bstring &bs) { return encode<bstring>(bs); },
-                [](bdict &bd) { return encode<bdict>(bd); },
-                [](blist &bl) { return encode<blist>(bl); }
+                [](const bint &bi) { return encode<bint>(bi); },
+                [](const bstring &bs) { return encode<bstring>(bs); },
+                [](const bdict &bd) { return encode<bdict>(bd); },
+                [](const blist &bl) { return encode<blist>(bl); }
             },benc);
     }
 }

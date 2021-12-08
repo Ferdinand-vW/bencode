@@ -12,23 +12,23 @@
 
 namespace bencode {
     class bdata {
-        shared_ptr<bencode::bencoding> decoded;
+        bencode::bencoding m_decoded;
 
         public:
-            bencoding value() const { return *decoded; }
-            optional<bint>    get_bint()    const { return try_get<bint>(*decoded.get()); }
-            optional<bstring> get_bstring() const { return try_get<bstring>(*decoded.get()); }
-            optional<blist>   get_blist()   const { return try_get<blist>(*decoded.get()); }
-            optional<bdict>   get_bdict()   const { return try_get<bdict>(*decoded.get()); }
+            const bencoding& value() const { return m_decoded; }
+            std::optional<bint>    get_bint()    const && { return try_get<bint>(m_decoded); }
+            std::optional<bstring> get_bstring() const && { return try_get<bstring>(m_decoded); }
+            std::optional<blist>   get_blist()   const && { return try_get<blist>(m_decoded); }
+            std::optional<bdict>   get_bdict()   const && { return try_get<bdict>(m_decoded); }
 
-            bdata (const bencoding &pd) : decoded(make_shared<bencoding>(pd)) {};
-            bdata (const bint      &pd) : decoded(make_shared<bencoding>(pd)) {};
-            bdata (const bstring   &pd) : decoded(make_shared<bencoding>(pd)) {};
-            bdata (const blist     &pd) : decoded(make_shared<bencoding>(pd)) {};
-            bdata (const bdict     &pd) : decoded(make_shared<bencoding>(pd)) {};
+            bdata (const bencoding &&pd) : m_decoded(std::move(pd)) {};
+            bdata (const bint      &&pd) : m_decoded(std::move(pd)) {};
+            bdata (const bstring   &&pd) : m_decoded(std::move(pd)) {};
+            bdata (const blist     &&pd) : m_decoded(std::move(pd)) {};
+            bdata (const bdict     &&pd) : m_decoded(std::move(pd)) {};
 
             string display_type();
 
-            friend ostream& operator<<(ostream&,const bdata&);
+            friend std::ostream& operator<<(std::ostream&,const bdata&);
     };
 }

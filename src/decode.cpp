@@ -81,7 +81,7 @@ namespace bencode
 			return BErrorF::expected_string_symbols(word,n - num);
 		}
 
-		return bstring(buff);
+		return bstring(std::move(buff));
 	}
 	
 	template<>
@@ -136,7 +136,7 @@ namespace bencode
 		}
 		is >> l; // drop e
 
-		return blist(items);
+		return blist(std::move(items));
 	}
 
 	template<>
@@ -171,7 +171,7 @@ namespace bencode
 
 		is >> d; // drop e
 
-		return bdict(dict);
+		return bdict(std::move(dict));
 	}
 
 	template<>

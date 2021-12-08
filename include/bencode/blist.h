@@ -11,11 +11,11 @@ using namespace std;
 
 namespace bencode {
 	class blist {
-		vector<bdata> items;
+		vector<bdata> m_items;
 
 	public:
-		blist(vector<bdata> _items) : items(_items) {};
-		vector<bdata> value() const { return items; }
+		blist(vector<bdata> &&items) : m_items(std::move(items)) {};
+		const vector<bdata>& value() const { return m_items; }
 
 		string display_type();
 		

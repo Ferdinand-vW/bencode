@@ -13,21 +13,21 @@ using namespace std;
 namespace bencode
 {
 	class bdict {
-		map<bstring, bdata> kvs;
+		map<bstring, bdata> m_kvs;
 	public:
-		bdict(map<bstring, bdata> kv) : kvs(kv) {};
+		bdict(map<bstring, bdata> &&kv) : m_kvs(std::move(kv)) {};
 
-		map<bstring, bdata> key_values() const {
-			return kvs;
+		const map<bstring, bdata>& key_values() const {
+			return m_kvs;
 		}
-		vector<bdata> values() const;
-		vector<bstring> keys() const;
-		string display_type() const;
-		bdata at(const string &s) const;
-		optional<bdata> find(const string &s) const;
+		std::vector<bdata> values() const;
+		std::vector<bstring> keys() const;
+		std::string display_type() const;
+		const bdata& at(const string &s) const;
+		const std::optional<bdata> find(const string &s) const;
 		void merge(const bdict &bd);
 		void insert(std::pair<bstring, bdata> kv);
 
-		friend ostream& operator<<(ostream&, const bdict&);
+		friend std::ostream& operator<<(std::ostream&, const bdict&);
 	};
 }
