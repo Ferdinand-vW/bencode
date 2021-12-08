@@ -1,7 +1,7 @@
 #include "bencode/bencode.h"
 
 namespace bencode {
-    std::string bstring::display_type() {
+    std::string bstring::display_type() const {
         return "bstring";
     }
 
@@ -11,7 +11,7 @@ namespace bencode {
         return os;
     }
 			
-    bool operator<(bstring b1,bstring b2) {
+    bool operator<(const bstring &b1,const bstring &b2) {
         return b1.value() < b2.value();
     }
 }

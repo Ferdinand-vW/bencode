@@ -18,11 +18,11 @@ namespace bencode {
 			std::copy(s.begin(),s.end(),back_inserter(m_bytes));
 		 }
 
-		std::string display_type();
+		std::string display_type() const;
 		const std::vector<char>& value() const { return m_bytes; }
 		std::string to_string() const { return std::string(m_bytes.begin(),m_bytes.end()); }
 
 		friend std::ostream& operator<<(std::ostream& os, const bstring& bs);
-		friend bool operator<(bstring b1,bstring b2);
+		friend bool operator<(const bstring &b1,const bstring &b2);
 	};
 }

@@ -9,7 +9,7 @@ namespace bencode {
     class BError {
         std::string m;
         public:
-            BError(std::string x = "") : m(x) {};
+            BError(std::string &&x = "") : m(std::move(x)) {};
             std::string message() { return "Error! " + m; }
             friend std::ostream& operator<<(std::ostream& os, BError be) {
                 os << be.message();
@@ -43,28 +43,28 @@ namespace bencode {
                 return BError(std::string("Found end of stream. bint must be closed with 'e'"));
             }
 
-            static BError conversion_to_int(std::string s) {
+            static BError conversion_to_int(const std::string &s) {
                 return BError("Could not convert input " + s + " to int.");
             }
 
-            static BError expected_string_open(std::string s) {
+            static BError expected_string_open(const std::string &s) {
                 return BError("BString must start with an integer. Found symbol " + s);
             }
 
-            static BError expected_string_symbols(std::string s,int n) {
+            static BError expected_string_symbols(const std::string &s,int n) {
                 return BError("Found end of stream. Parsed \"" + s + "\". Expecting " + std::to_string(n) + " more symbols");
             }
 
-            static BError expected_string_delimiter(std::string s) {
+            static BError expected_string_delimiter(const std::string &s) {
                 return BError(std::string("Expected symbol ':', but got ") + s);
             }
 
-            static BError invalid_input(std::string s) {
+            static BError invalid_input(const std::string & s) {
                 return BError("Invalid Input. Next symbol is " + s);
             }
 
-            static BError generic_error(std::string m) {
-                return BError(m);
+            static BError generic_error(std::string &&m) {
+                return BError(std::move(m));
             }
     };
 }

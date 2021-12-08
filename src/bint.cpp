@@ -2,7 +2,7 @@
 
 namespace bencode {
 
-	std::string bint::display_type() {
+	std::string bint::display_type() const {
 		return "bint";
 	}
 
