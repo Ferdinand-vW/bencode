@@ -23,4 +23,6 @@ set_target_properties(bencode_lib PROPERTIES
             )
 
 
+install(TARGETS bencode_run DESTINATION ${INSTALL_BIN_DIR})
 install(TARGETS bencode_lib DESTINATION ${INSTALL_LIB_DIR})
+install(FILES ${header} DESTINATION ${INSTALL_INCLUDE_DIR})
