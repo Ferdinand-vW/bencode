@@ -3,21 +3,21 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-project (Bencode)
+project (bencode VERSION 1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "default install path" FORCE)
-set(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin")
-set(INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
-set(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+set(PROJ_VER_NAME "${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION}")
+set(BUILD_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}/include")
+set(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/${PROJ_VER_NAME}/bin")
+set(INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/${PROJ_VER_NAME}/include")
+set(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/${PROJ_VER_NAME}/lib")
 
 add_custom_target(build_tests)
 add_custom_target(run_tests COMMAND ${CMAKE_CTEST_COMMAND})
 add_dependencies(run_tests build_tests)
 
-include_directories(include)
 add_subdirectory(src)
-add_subdirectory(include)
 enable_testing()
 add_subdirectory(test EXCLUDE_FROM_ALL)

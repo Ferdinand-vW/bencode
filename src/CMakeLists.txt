@@ -9,6 +9,9 @@ find_package(Boost 1.74.0)
 
 # Add source to this project's executable.
 add_executable (bencode_run ${SOURCES})
+target_include_directories(bencode_run PUBLIC 
+    $<BUILD_INTERFACE:${BUILD_INCLUDE_DIR}>
+    $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>)
 
 set_target_properties(bencode_run PROPERTIES
             CXX_STANDARD 17
@@ -16,7 +19,10 @@ set_target_properties(bencode_run PROPERTIES
             )
 
 add_library(bencode_lib STATIC ${SOURCES})
-
+target_include_directories(bencode_lib PUBLIC
+    $<BUILD_INTERFACE:${BUILD_INCLUDE_DIR}>
+    $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>)
+    
 set_target_properties(bencode_lib PROPERTIES
             CXX_STANDARD 17
             CXX_EXTENSIONS OFF
@@ -24,5 +30,6 @@ set_target_properties(bencode_lib PROPERTIES
 
 
 install(TARGETS bencode_run DESTINATION ${INSTALL_BIN_DIR})
-install(TARGETS bencode_lib DESTINATION ${INSTALL_LIB_DIR})
+install(TARGETS bencode_lib EXPORT bencode_lib DESTINATION ${INSTALL_LIB_DIR})
+install(EXPORT bencode_lib DESTINATION ${INSTALL_LIB_DIR})
 install(FILES ${header} DESTINATION ${INSTALL_INCLUDE_DIR})
