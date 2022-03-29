@@ -32,4 +32,4 @@ set_target_properties(bencode_lib PROPERTIES
 install(TARGETS bencode_run DESTINATION ${INSTALL_BIN_DIR})
 install(TARGETS bencode_lib EXPORT bencode_lib DESTINATION ${INSTALL_LIB_DIR})
 install(EXPORT bencode_lib DESTINATION ${INSTALL_LIB_DIR}/cmake)
-export(EXPORT bencode_lib)
+export(EXPORT bencode_lib FILE ${CMAKE_CURRENT_BINARY_DIR}/bencode_lib-config.cmake)
