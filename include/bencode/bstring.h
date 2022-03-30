@@ -21,7 +21,7 @@ namespace bencode {
 		}
 
 		std::string display_type() const;
-		std::vector<char> value() { return m_bytes; }
+		std::vector<char> value() const { return m_bytes; }
 		std::string to_string() const { return std::string(m_bytes.begin(),m_bytes.end()); }
 
 		friend std::ostream& operator<<(std::ostream& os, const bstring& bs);
