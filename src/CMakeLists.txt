@@ -11,7 +11,7 @@ find_package(Boost 1.74.0)
 add_executable (bencode_run ${SOURCES})
 target_include_directories(bencode_run PUBLIC 
     $<BUILD_INTERFACE:${BUILD_INCLUDE_DIR}>
-    $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>)
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 set_target_properties(bencode_run PROPERTIES
             CXX_STANDARD 17
@@ -21,7 +21,7 @@ set_target_properties(bencode_run PROPERTIES
 add_library(bencode_lib STATIC ${SOURCES})
 target_include_directories(bencode_lib PUBLIC
     $<BUILD_INTERFACE:${BUILD_INCLUDE_DIR}>
-    $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>)
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
     
 set_target_properties(bencode_lib PROPERTIES
             CXX_STANDARD 17
@@ -29,8 +29,9 @@ set_target_properties(bencode_lib PROPERTIES
             )
 
 
-install(TARGETS bencode_run DESTINATION ${INSTALL_BIN_DIR})
-install(TARGETS bencode_lib EXPORT bencode_lib DESTINATION ${INSTALL_LIB_DIR})
-install(EXPORT bencode_lib DESTINATION ${INSTALL_LIB_DIR}/cmake)
-export(EXPORT bencode_lib FILE ${CMAKE_CURRENT_BINARY_DIR}/bencode_lib-config.cmake)
+install(TARGETS bencode_run DESTINATION ${CMAKE_INSTALL_BINDIR}/${PROJ_VER_NAME})
+install(TARGETS bencode_lib EXPORT bencode DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJ_VER_NAME})
+install(EXPORT bencode FILE bencode-config.cmake NAMESPACE ${PROJ_VER_NAME}:: DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJ_VER_NAME}/cmake)
+install(EXPORT bencode FILE bencode-config.cmake NAMESPACE ${PROJ_VER_NAME}:: DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJ_VER_NAME})
+export(EXPORT bencode FILE ${CMAKE_CURRENT_BINARY_DIR}/bencode-config.cmake)
 export(PACKAGE bencode)

@@ -6,6 +6,7 @@ cmake_minimum_required (VERSION 3.8)
 project (bencode VERSION 1.0)
 
 set(CMAKE_CXX_STANDARD 17)
+include(GNUInstallDirs) # Enable CMAKE INSTALL variables
 message (STATUS "CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
 # set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "default install path" FORCE)
 set(PROJ_VER_NAME "${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION}")
