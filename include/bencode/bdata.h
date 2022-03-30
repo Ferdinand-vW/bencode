@@ -22,10 +22,15 @@ namespace bencode {
             std::optional<bdict>   get_bdict()   const { return try_get<bdict>(m_decoded); }
 
             bdata (const bencoding &&pd) : m_decoded(std::move(pd)) {};
+            bdata (const bencoding &pd)  : m_decoded(pd) {};
             bdata (const bint      &&pd) : m_decoded(std::move(pd)) {};
+            bdata (const bint      &pd)  : m_decoded(pd) {};
             bdata (const bstring   &&pd) : m_decoded(std::move(pd)) {};
+            bdata (const bstring   &pd)  : m_decoded(pd) {};
             bdata (const blist     &&pd) : m_decoded(std::move(pd)) {};
+            bdata (const blist     &pd)  : m_decoded(pd) {};
             bdata (const bdict     &&pd) : m_decoded(std::move(pd)) {};
+            bdata (const bdict     &pd)  : m_decoded(pd) {};
 
             string display_type();
 

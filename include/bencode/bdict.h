@@ -16,6 +16,7 @@ namespace bencode
 		map<bstring, bdata> m_kvs;
 	public:
 		bdict(map<bstring, bdata> &&kv) : m_kvs(std::move(kv)) {};
+		bdict(map<bstring, bdata> &kv)  : m_kvs(kv) {};
 
 		const map<bstring, bdata>& key_values() const {
 			return m_kvs;

@@ -13,10 +13,12 @@ namespace bencode {
 		vector<char> m_bytes;
 	public:
 		bstring(std::vector<char> &&bytes) : m_bytes(std::move(bytes)) {};
-		bstring(std::string &&s) {
+		bstring(std::vector<char> &bytes) : m_bytes(bytes) {};
+		
+		bstring(const std::string &s) {
 			m_bytes.reserve(s.size());
 			std::copy(s.begin(),s.end(),back_inserter(m_bytes));
-		 }
+		}
 
 		std::string display_type() const;
 		const std::vector<char>& value() const { return m_bytes; }
