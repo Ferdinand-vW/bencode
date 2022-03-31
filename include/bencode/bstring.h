@@ -13,7 +13,7 @@ namespace bencode {
 		vector<char> m_bytes;
 	public:
 		bstring(std::vector<char> &&bytes) : m_bytes(std::move(bytes)) {};
-		bstring(std::vector<char> &bytes) : m_bytes(bytes) {};
+		bstring(const std::vector<char> &bytes) : m_bytes(bytes) {};
 		
 		bstring(const std::string &s) {
 			m_bytes.reserve(s.size());
