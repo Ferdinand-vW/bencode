@@ -37,7 +37,7 @@ namespace bencode {
 
     template<>
     std::string encode<blist>(const blist &bl) {
-        auto& items = bl.value();
+        auto items = bl.value();
         std::string s = "";
         for(auto i : items) {
             s += encode<bdata>(i);
