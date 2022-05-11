@@ -26,7 +26,7 @@ target_include_directors(MyProj PUBLIC ${BENCODE_INCLUDE_DIR})
 ```
 5. Link the bencode library
 ```cmake
-target_link_libraries(MyProj bencode_lib)
+target_link_libraries(MyProj bencode)
 ``` 
 
 
