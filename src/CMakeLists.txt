@@ -28,9 +28,33 @@ set_target_properties(bencode PROPERTIES
             CXX_EXTENSIONS OFF
             )
 
+include(GNUInstallDirs)
+#install(TARGETS bencode_run DESTINATION ${CMAKE_INSTALL_BINDIR}/${LIBNAME})
+install(TARGETS ${LIBNAME}
+        EXPORT ${LIBNAME}Targets
+        LIBRARY
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/${LIBNAME})
+install(EXPORT ${LIBNAME}Targets
+        NAMESPACE ${LIBNAME}::
+        FILE ${LIBNAME}Config.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIBNAME})
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
+        "Config.cmake.in"
+        "${LIBNAME}Config.cmake"
+        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIBNAME}
+        PATH_VARS CMAKE_INSTALL_LIBDIR
+)
 
-install(TARGETS bencode_run DESTINATION ${CMAKE_INSTALL_BINDIR}/${LIBNAME})
-install(TARGETS bencode EXPORT ${LIBNAME} DESTINATION ${CMAKE_INSTALL_LIBDIR}/${LIBNAME})
-install(EXPORT bencode FILE ${LIBNAME}Configjk.cmake NAMESPACE ${LIBNAME}:: DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIBNAME})
-export(EXPORT bencode FILE ${CMAKE_CURRENT_BINARY_DIR}/${LIBNAME}.cmake)
-export(PACKAGE bencode)
+write_basic_package_version_file(
+        ${CMAKE_CURRENT_BINARY_DIR}/${LIBNAME}ConfigVersion.cmake
+        VERSION 1.0.0
+        COMPATIBILITY SameMajorVersion
+)
+
+install(
+        FILES "${CMAKE_CURRENT_BINARY_DIR}/${LIBNAME}Config.cmake"
+              "${CMAKE_CURRENT_BINARY_DIR}/${LIBNAME}ConfigVersion.cmake"
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${LIBNAME}"
+)
+
