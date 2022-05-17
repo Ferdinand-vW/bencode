@@ -5,8 +5,8 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-#include "btypes.h"
-// #include "binterface.h"
+
+#include "bencode/btypes.h"
 
 using namespace std;
 

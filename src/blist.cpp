@@ -1,4 +1,5 @@
-#include "bencode/bencode.h"
+#include "bencode/blist.h"
+#include "bencode/bdata.h"
 
 namespace bencode {
     string blist::display_type() {

@@ -61,8 +61,8 @@ namespace bencode
 			snum+=d; 
 		}
 
-		long long n = 0;
-		if (snum.length() > 0) { n = boost::lexical_cast<long long>(snum); }
+		int64_t n = 0;
+		if (snum.length() > 0) { n = boost::lexical_cast<int64_t>(snum); }
 		else if (is.eof()) { return BErrorF::expected_string_open(""); }
 		else 		  	   { return BErrorF::expected_string_open(string(1,is.peek())); }
 
@@ -106,7 +106,7 @@ namespace bencode
 		
 		is >> ch; // parse e
 		try {
-			long long n = boost::lexical_cast<long long>(intstring);
+			int64_t n = boost::lexical_cast<int64_t>(intstring);
 			return bint(n);
 		} catch (...) {
 			return BErrorF::conversion_to_int(intstring);

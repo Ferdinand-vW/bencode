@@ -1,19 +1,18 @@
 #pragma once
 
 #include <ostream>
-#include "btypes.h"
-// #include "binterface.h"
+#include "bencode/btypes.h"
 
 using namespace std;
 
 namespace bencode {
 
 	class bint {
-		long long i;
+		int64_t i;
 	public:
-		bint(long long j) : i(j) {};
+		bint(int64_t j) : i(j) {};
 
-		long long value() const { return i; }
+		int64_t value() const { return i; }
 
 		std::string display_type() const;
 

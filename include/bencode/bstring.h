@@ -1,9 +1,10 @@
 #pragma once
 
-#include "btypes.h"
 #include <algorithm>
 #include <string>
 #include <sstream>
+
+#include "bencode/btypes.h"
 
 using namespace std;
 

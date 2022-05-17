@@ -1,4 +1,4 @@
-#include "bencode/bencode.h"
+#include "bencode/bstring.h"
 
 namespace bencode {
     std::string bstring::display_type() const {

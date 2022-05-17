@@ -1,5 +1,5 @@
 #include <variant>
-#include "bencode/bencode.h"
+#include "bencode/bdata.h"
 #include "bencode/btypes.h"
 
 namespace bencode {

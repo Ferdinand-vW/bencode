@@ -2,13 +2,12 @@
 
 #include <memory>
 #include <variant>
-#include "btypes.h"
-#include "bint.h"
-#include "bstring.h"
-#include "blist.h"
-#include "bdict.h"
-#include "utils.h"
-// #include "binterface.h"
+#include "bencode/btypes.h"
+#include "bencode/bint.h"
+#include "bencode/bstring.h"
+#include "bencode/blist.h"
+#include "bencode/bdict.h"
+#include "bencode/utils.h"
 
 namespace bencode {
     class bdata {

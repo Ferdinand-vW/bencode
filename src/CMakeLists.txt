@@ -29,16 +29,21 @@ set_target_properties(bencode PROPERTIES
             )
 
 include(GNUInstallDirs)
-#install(TARGETS bencode_run DESTINATION ${CMAKE_INSTALL_BINDIR}/${LIBNAME})
+
+# Add target to export set
 install(TARGETS ${LIBNAME}
         EXPORT ${LIBNAME}Targets
         LIBRARY
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/${LIBNAME})
+
+# Install export set in install destination
 install(EXPORT ${LIBNAME}Targets
         NAMESPACE ${LIBNAME}::
         FILE ${LIBNAME}Config.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIBNAME})
+
 include(CMakePackageConfigHelpers)
+
 configure_package_config_file(
         "Config.cmake.in"
         "${LIBNAME}Config.cmake"

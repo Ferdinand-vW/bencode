@@ -4,8 +4,8 @@
 #include <memory>
 #include <ostream>
 #include <vector>
-#include "btypes.h"
-// #include "binterface.h"
+
+#include "bencode/btypes.h"
 
 using namespace std;
 
