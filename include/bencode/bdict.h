@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <optional>
 
 #include "bencode/btypes.h"
 
