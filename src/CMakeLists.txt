@@ -21,7 +21,7 @@ set_target_properties(bencode_run PROPERTIES
 add_library(bencode STATIC ${SOURCES})
 target_include_directories(bencode PUBLIC
     $<BUILD_INTERFACE:${BUILD_INCLUDE_DIR}>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+    $<INSTALL_INTERFACE:include>)
     
 set_target_properties(bencode PROPERTIES
             CXX_STANDARD 17
@@ -33,12 +33,11 @@ include(GNUInstallDirs)
 # Add target to export set
 install(TARGETS ${LIBNAME}
         EXPORT ${LIBNAME}Targets
-        LIBRARY
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/${LIBNAME})
+        ARCHIVE
+        DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 # Install export set in install destination
 install(EXPORT ${LIBNAME}Targets
-        NAMESPACE ${LIBNAME}::
         FILE ${LIBNAME}Config.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIBNAME})
 
@@ -61,5 +60,9 @@ install(
         FILES "${CMAKE_CURRENT_BINARY_DIR}/${LIBNAME}Config.cmake"
               "${CMAKE_CURRENT_BINARY_DIR}/${LIBNAME}ConfigVersion.cmake"
         DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${LIBNAME}"
+)
+
+export(EXPORT ${LIBNAME}Targets
+        FILE "${CMAKE_CURRENT_BINARY_DIR}/epoll_wrapper.cmake"
 )
 
