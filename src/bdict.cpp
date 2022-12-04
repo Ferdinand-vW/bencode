@@ -9,37 +9,30 @@
 
 namespace bencode {
 
-    string bdict::display_type() const {
+    std::string bdict::display_type() const {
         return "bdict";
     }
 
-    vector<bstring> bdict::keys() const {
-        vector<bstring> vec;
+    std::vector<bstring> bdict::keys() const {
+        std::vector<bstring> vec;
         for(auto &kvp : m_kvs) {
             vec.push_back(kvp.first);
         }
         return vec;
 	}
-    vector<bdata> bdict::values() const {
-        vector<bdata> vec;
-        for(auto &kvp : m_kvs) {
-            vec.push_back(kvp.second);
-        }
-        return vec;
-    }
-
-    const bdata& bdict::at(const string &s) const {
-        bstring bs(vector<char>(s.begin(),s.end()));
+    
+    const bdata& bdict::at(const std::string &s) const {
+        bstring bs(std::vector<char>(s.begin(),s.end()));
         return m_kvs.at(bs);
     }
 
-    const std::optional<bdata> bdict::find(const string &s) const {
-        bstring bs(vector<char>(s.begin(),s.end()));
+    const bdata* bdict::find(const std::string &s) const {
+        bstring bs(std::vector<char>(s.begin(),s.end()));
         auto v_it = m_kvs.find(bs);
         if(v_it != m_kvs.end()) {
-            return v_it->second;
+            return &v_it->second;
         } else {
-            return {};
+            return nullptr;
         }
     }
 
@@ -48,11 +41,11 @@ namespace bencode {
 		m_kvs.merge(keyvals);
 	}
 
-	void bdict::insert(std::pair<bstring, bdata> kv) {
-        m_kvs.insert(kv);
+	void bdict::insert(std::pair<bstring, bdata>&& kv) {
+        m_kvs.insert(std::move(kv));
     }
 
-    ostream& operator<<(ostream& os, const bdict &bd) {
+    std::ostream& operator<<(std::ostream& os, const bdict &bd) {
         auto m_kvs = bd.key_values();
         os << "{";
 

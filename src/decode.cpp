@@ -22,38 +22,36 @@
 #include "bencode/decode.h"
 #include "bencode/utils.h"
 
-using namespace std;
-
 namespace bencode
 {
-	bool peek_bint(istream& is) {
+	bool peek_bint(std::istream& is) {
 		char i = is.peek();
 
 		return i == 'i';
 	}
 
 
-	bool peek_bstring(istream &is) {
+	bool peek_bstring(std::istream &is) {
 		char s = is.peek();
 
 		return isdigit(s);
 	}
 
-	bool peek_blist(istream &is) {
+	bool peek_blist(std::istream &is) {
 		char l = is.peek();
 
 		return l == 'l';
 	}
 
-	bool peek_bdict(istream& is) {
+	bool peek_bdict(std::istream& is) {
 		char d = is.peek();
 
 		return d == 'd';
 	}
 
 	template<>
-	either<bstring> decode<bstring>(istream& is) {
-		string snum;
+	either<bstring> decode<bstring>(std::istream& is) {
+		std::string snum;
 		char d;
 
 		while(isdigit(is.peek()) && !is.eof()) { // build the int string
@@ -64,17 +62,17 @@ namespace bencode
 		int64_t n = 0;
 		if (snum.length() > 0) { n = boost::lexical_cast<int64_t>(snum); }
 		else if (is.eof()) { return BErrorF::expected_string_open(""); }
-		else 		  	   { return BErrorF::expected_string_open(string(1,is.peek())); }
+		else 		  	   { return BErrorF::expected_string_open(std::string(1,is.peek())); }
 
 		char del = is.peek();
 		if (del == ':') { is >> del; } // parse and throw away the delimiter
 		else if (is.eof()) { return BErrorF::expected_string_delimiter(""); }
-		else 		  	   { return BErrorF::expected_string_delimiter(string(1,del)); }
+		else 		  	   { return BErrorF::expected_string_delimiter(std::string(1,del)); }
 		
-		vector<char> buff(n); //create buffer of size n
+		std::vector<char> buff(n); //create buffer of size n
 		is.read(&buff[0], n); // try to read n bytes
 		auto num = is.gcount(); // actual number of bytes read
-		string word (buff.begin(),buff.begin()+num); // copy the bytes into string
+		std::string word (buff.begin(),buff.begin()+num); // copy the bytes into string
 
 		//if end of stream reached but expecting more symbols
 		if (num < n) {
@@ -85,7 +83,7 @@ namespace bencode
 	}
 	
 	template<>
-	either<bint> decode<bint>(istream& is) {
+	either<bint> decode<bint>(std::istream& is) {
 		char i;
 		is >> i;
 
@@ -93,7 +91,7 @@ namespace bencode
 			return BErrorF::expected_int_open(i);
 		}
 
-		string intstring;
+		std::string intstring;
 		char ch;
 		while (is.peek() != 'e' && !is.eof()) {
 			is >> ch;
@@ -114,7 +112,7 @@ namespace bencode
 	}
 
 	template<>
-	either<blist> decode<blist>(istream& is) {
+	either<blist> decode<blist>(std::istream& is) {
 		char l;
 		is >> l;
 
@@ -122,13 +120,15 @@ namespace bencode
 			return BErrorF::expected_list_open(l);
 		}
 
-		vector<bdata> items;
+		std::vector<bdata> items;
 
 		// decode any additional items
 		while (is.peek() != 'e' && !is.eof()) {
 			auto item = decode<bdata>(is);
 			if (!item) { return item.error(); }
-			else { items.push_back(item.value()); }
+			else { 
+				items.push_back(std::move(item.value()));
+			}
 		}
 
 		if (is.eof()) {
@@ -140,7 +140,7 @@ namespace bencode
 	}
 
 	template<>
-	either<bdict> decode<bdict>(istream& is) {
+	either<bdict> decode<bdict>(std::istream& is) {
 		char d;
 		is >> d;
 
@@ -148,7 +148,7 @@ namespace bencode
 			return BErrorF::expected_dict_open(d);
 		}
 
-		map<bstring,bdata> dict;
+		std::map<bstring,bdata> dict;
 
 		while(is.peek() != 'e' && !is.eof()) {
 			auto decodedKey = decode<bstring>(is);
@@ -159,9 +159,9 @@ namespace bencode
 			if (!decodedValue) { return decodedValue.error(); }
 			else { 
 				bstring key = decodedKey.value();
-				bdata val   = decodedValue.value();
+				bdata val   = std::move(decodedValue.value());
 				
-				dict.insert({key,val}); 
+				dict.insert({key,std::move(val)}); 
 			}
 		}
 
@@ -175,32 +175,33 @@ namespace bencode
 	}
 
 	template<>
-	either<bdata> decode<bdata>(istream& is) {
+	either<bdata> decode(std::istream& is) {
+
 
 		if(peek_bint(is)) {
 			auto vint = decode<bint>(is);
 			if (!vint) { return vint.error(); }
-			else 	   { return bdata(vint.value()); }
+			else 	   { return bdata(std::shared_ptr<bencoding>(new bencoding(std::move(vint.value())))); }
 			
 		} else if (peek_bstring(is)) {
 			auto vstring = decode<bstring>(is);
 			if (!vstring) { return vstring.error(); }
-			else 		  { return bdata(vstring.value()); }
+			else 		  { return bdata(std::shared_ptr<bencoding>(new bencoding(std::move(vstring.value())))); }
 
 		} else if (peek_blist(is)) {
 			auto vlist = decode<blist>(is);
 			if (!vlist) { return vlist.error(); }
-			else 	    { return bdata(vlist.value()); }
+			else 	    { return bdata(std::shared_ptr<bencoding>(new bencoding(std::move(vlist.value())))); }
 		
 		} else if (peek_bdict(is)) {
 			auto vdict = decode<bdict>(is);
 			if (!vdict) { return vdict.error(); }
-			else 	    { return bdata(vdict.value()); }
+			else 	    { return bdata(std::shared_ptr<bencoding>(new bencoding(std::move(vdict.value())))); }
 		
 		} else {
 			char c = is.peek();
 			std::string s;
-			if (is.eof()) { s = ""; } else { s = to_string(c); }
+			if (is.eof()) { s = ""; } else { s = std::to_string(c); }
 			return BErrorF::invalid_input(s);
 		}
 	}

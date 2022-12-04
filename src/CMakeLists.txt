@@ -5,29 +5,21 @@ file(GLOB SOURCES "*.cpp")
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost 1.74.0)
+find_package(Boost 1.80.0)
 
 # Add source to this project's executable.
 add_executable (bencode_run ${SOURCES})
+target_link_libraries(bencode_run ${BOOST_LIBRARIES})
 target_include_directories(bencode_run PUBLIC 
     $<BUILD_INTERFACE:${BUILD_INCLUDE_DIR}>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-set_target_properties(bencode_run PROPERTIES
-            CXX_STANDARD 17
-            CXX_EXTENSIONS OFF
-            )
-
 add_library(bencode STATIC ${SOURCES})
+target_link_libraries(bencode ${BOOST_LIBRARIES})
 target_include_directories(bencode PUBLIC
     $<BUILD_INTERFACE:${BUILD_INCLUDE_DIR}>
     $<INSTALL_INTERFACE:include>)
     
-set_target_properties(bencode PROPERTIES
-            CXX_STANDARD 17
-            CXX_EXTENSIONS OFF
-            )
-
 include(GNUInstallDirs)
 
 # Add target to export set

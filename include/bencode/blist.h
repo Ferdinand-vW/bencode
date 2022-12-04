@@ -5,21 +5,19 @@
 #include <ostream>
 #include <vector>
 
+#include "bencode/bdata.h"
 #include "bencode/btypes.h"
-
-using namespace std;
 
 namespace bencode {
 	class blist {
-		vector<bdata> m_items;
+		std::vector<bdata> m_items;
 
 	public:
-		blist(vector<bdata> &&items) : m_items(std::move(items)) {};
-		blist(vector<bdata> &items) : m_items(items) {};
-		vector<bdata> value() const { return m_items; }
+		blist(std::vector<bdata> &&items) : m_items(std::move(items)) {};
+		const std::vector<bdata>& values() const;
 
-		string display_type();
+		std::string display_type();
 		
-		friend ostream& operator<<(ostream& os, const blist &bl);
+		friend std::ostream& operator<<(std::ostream& os, const blist &bl);
 	};
 }

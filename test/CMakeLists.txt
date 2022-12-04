@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.8)
 
-find_package(Boost 1.74.0 REQUIRED COMPONENTS unit_test_framework)
+find_package(Boost 1.80.0 REQUIRED COMPONENTS unit_test_framework)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)

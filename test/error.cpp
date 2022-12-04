@@ -8,7 +8,7 @@ using namespace bencode;
 BOOST_AUTO_TEST_CASE(bint_error1)
 {
   std::string s = "i56s4e";
-  stringstream ss(s);
+  std::stringstream ss(s);
   auto dec = decode<bint>(ss);
   BOOST_TEST(BErrorF::conversion_to_int("56s4").message() == dec.error().message());
 }
@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_CASE(bint_error1)
 BOOST_AUTO_TEST_CASE(bint_error2)
 {
   std::string s = "s556";
-  stringstream ss(s);
+  std::stringstream ss(s);
   auto dec = decode<bint>(ss);
   BOOST_TEST(BErrorF::expected_int_open('s').message() == dec.error().message());
 }
@@ -24,28 +24,28 @@ BOOST_AUTO_TEST_CASE(bint_error2)
 BOOST_AUTO_TEST_CASE(bint_error3)
 {
   std::string s = "i564";
-  stringstream ss(s);
+  std::stringstream ss(s);
   auto dec = decode<bint>(ss);
   BOOST_TEST(BErrorF::expected_int_end().message() == dec.error().message());
 }
 
 BOOST_AUTO_TEST_CASE(bstring_error1)
 {
-  stringstream ss("3:t");
+  std::stringstream ss("3:t");
   auto dec = decode<bstring>(ss);
   BOOST_TEST(BErrorF::expected_string_symbols("t",2).message() == dec.error().message());
 }
 
 BOOST_AUTO_TEST_CASE(bstring_error2)
 {
-  stringstream ss("4");
+  std::stringstream ss("4");
   auto dec = decode<bstring>(ss);
   BOOST_TEST(BErrorF::expected_string_delimiter("").message() == dec.error().message());
 }
 
 BOOST_AUTO_TEST_CASE(bstring_error3)
 {
-  stringstream ss("4r:tyu");
+  std::stringstream ss("4r:tyu");
   auto dec = decode<bstring>(ss);
   BOOST_TEST(BErrorF::expected_string_delimiter("r").message() == dec.error().message());
 }
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(bstring_error3)
 BOOST_AUTO_TEST_CASE(blist_error1)
 {
   std::string s = "5:rwersei567e";
-  stringstream ss(s);
+  std::stringstream ss(s);
   auto dec = decode<blist>(ss);
   BOOST_TEST(BErrorF::expected_list_open('5').message() == dec.error().message());
 }
@@ -61,7 +61,7 @@ BOOST_AUTO_TEST_CASE(blist_error1)
 BOOST_AUTO_TEST_CASE(blist_error2)
 {
   std::string s = "li564e";
-  stringstream ss(s);
+  std::stringstream ss(s);
   auto dec = decode<blist>(ss);
   BOOST_TEST(BErrorF::expected_list_end().message() == dec.error().message());
 }
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE(blist_error2)
 BOOST_AUTO_TEST_CASE(bdict_error1)
 {
   std::string s = "di456e3:erte";
-  stringstream ss(s);
+  std::stringstream ss(s);
   auto dec = decode<bdict>(ss);
   BOOST_TEST(BErrorF::expected_string_open("i").message() == dec.error().message());
 }
@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE(bdict_error1)
 BOOST_AUTO_TEST_CASE(bdict_error2)
 {
   std::string s = "i456e3:erte";
-  stringstream ss(s);
+  std::stringstream ss(s);
   auto dec = decode<bdict>(ss);
   BOOST_TEST(BErrorF::expected_dict_open('i').message() == dec.error().message());
 }
@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE(bdict_error2)
 BOOST_AUTO_TEST_CASE(bdict_error3)
 {
   std::string s = "d3:ert";
-  stringstream ss(s);
+  std::stringstream ss(s);
   auto dec = decode<bdict>(ss);
   BOOST_TEST(BErrorF::invalid_input("").message() == dec.error().message());
 }
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(bdict_error3)
 BOOST_AUTO_TEST_CASE(bdict_error4)
 {
   std::string s = "d3:erti456e";
-  stringstream ss(s);
+  std::stringstream ss(s);
   auto dec = decode<bdict>(ss);
   BOOST_TEST(BErrorF::expected_dict_end().message() == dec.error().message());
 }

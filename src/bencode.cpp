@@ -12,22 +12,23 @@
 #include "bencode/btypes.h"
 #include "bencode/utils.h"
 
-#include "bencode/bencode.h"
+#include "bencode/decode.h"
+#include "bencode/encode.h"
 
-using namespace std;
+;
 using namespace bencode;
 
 template <class T>
 void print_val(const T &t) {
-	cout << "val: " << t << endl;
+	std::cout << "val: " << t << std::endl;
 }
 
 int main()
 {
-	stringstream test("d3:cowi7856e4:spam4:eggse");
+	std::stringstream test("d3:cowi7856e4:spam4:eggse");
 	
 	auto i = decode<bencode::bdata>(test);
-	cout << encode(i.value()) << endl;
+	std::cout << encode(i.value()) << std::endl;
 
 	return 0;
 }

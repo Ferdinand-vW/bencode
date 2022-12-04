@@ -7,28 +7,27 @@
 #include <sstream>
 #include <optional>
 
+#include "bencode/bdata.h"
 #include "bencode/btypes.h"
-
-using namespace std;
 
 namespace bencode
 {
 	class bdict {
-		map<bstring, bdata> m_kvs;
+		std::map<bstring, bdata> m_kvs;
 	public:
-		bdict(map<bstring, bdata> &&kv) : m_kvs(std::move(kv)) {};
-		bdict(map<bstring, bdata> &kv)  : m_kvs(kv) {};
+		bdict(std::map<bstring, bdata> &&kv) : m_kvs(std::move(kv)) {};
+		// bdict(map<bstring, bdata> &kv)  : m_kvs(kv) {};
 
-		const map<bstring, bdata>& key_values() const {
+		const std::map<bstring, bdata>& key_values() const {
 			return m_kvs;
 		}
-		std::vector<bdata> values() const;
+		const std::vector<bdata>& values() const;
 		std::vector<bstring> keys() const;
 		std::string display_type() const;
-		const bdata& at(const string &s) const;
-		const std::optional<bdata> find(const string &s) const;
+		const bdata& at(const std::string &s) const;
+		const bdata* find(const std::string &s) const;
 		void merge(const bdict &bd);
-		void insert(std::pair<bstring, bdata> kv);
+		void insert(std::pair<bstring, bdata>&& kv);
 
 		friend std::ostream& operator<<(std::ostream&, const bdict&);
 	};

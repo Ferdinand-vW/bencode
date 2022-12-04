@@ -3,8 +3,6 @@
 #include <ostream>
 #include "bencode/btypes.h"
 
-using namespace std;
-
 namespace bencode {
 
 	class bint {

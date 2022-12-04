@@ -10,7 +10,7 @@ using namespace bencode;
 BOOST_AUTO_TEST_CASE(bint_identity)
 {
   std::string s = "i456e";
-  stringstream ss(s);
+  std::stringstream ss(s);
   auto dec = decode<bint>(ss);
   auto enc = encode<bint>(dec.value());
   BOOST_TEST(enc == s);
@@ -19,7 +19,7 @@ BOOST_AUTO_TEST_CASE(bint_identity)
 BOOST_AUTO_TEST_CASE(bstring_identity)
 {
   std::string s = "4:aspq";
-  stringstream ss(s);
+  std::stringstream ss(s);
   auto dec = decode<bstring>(ss);
   auto enc = encode<bstring>(dec.value());
   BOOST_TEST(enc == s);
@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE(bstring_identity)
 BOOST_AUTO_TEST_CASE(blist_identity)
 {
   std::string s = "l5:poiuyi9872ee";
-  stringstream ss(s);
+  std::stringstream ss(s);
   auto dec = decode<blist>(ss);
   auto enc = encode<blist>(dec.value());
   BOOST_TEST(enc == s);
@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE(blist_identity)
 BOOST_AUTO_TEST_CASE(bdict_identity)
 {
   std::string s = "d2:uili321ei765eee";
-  stringstream ss(s);
+  std::stringstream ss(s);
   auto dec = decode<bdict>(ss);
   auto enc = encode<bdict>(dec.value());
   BOOST_TEST(enc == s);
