@@ -11,6 +11,11 @@ namespace bencode {
         return m_items;
     }
 
+    std::vector<bdata> blist::values()
+    {
+        return m_items;
+    }
+
     std::ostream& operator<<(std::ostream& os,const blist &bl) {
         auto items = bl.values();
         os << "[";

@@ -181,22 +181,22 @@ namespace bencode
 		if(peek_bint(is)) {
 			auto vint = decode<bint>(is);
 			if (!vint) { return vint.error(); }
-			else 	   { return bdata(std::shared_ptr<bencoding>(new bencoding(std::move(vint.value())))); }
+			else 	   { return bdata(vint.value()); }
 			
 		} else if (peek_bstring(is)) {
 			auto vstring = decode<bstring>(is);
 			if (!vstring) { return vstring.error(); }
-			else 		  { return bdata(std::shared_ptr<bencoding>(new bencoding(std::move(vstring.value())))); }
+			else 		  { return bdata(vstring.value()); }
 
 		} else if (peek_blist(is)) {
 			auto vlist = decode<blist>(is);
 			if (!vlist) { return vlist.error(); }
-			else 	    { return bdata(std::shared_ptr<bencoding>(new bencoding(std::move(vlist.value())))); }
+			else 	    { return bdata(vlist.value()); }
 		
 		} else if (peek_bdict(is)) {
 			auto vdict = decode<bdict>(is);
 			if (!vdict) { return vdict.error(); }
-			else 	    { return bdata(std::shared_ptr<bencoding>(new bencoding(std::move(vdict.value())))); }
+			else 	    { return bdata(std::move(vdict.value())); }
 		
 		} else {
 			char c = is.peek();

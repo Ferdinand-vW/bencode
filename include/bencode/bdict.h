@@ -16,7 +16,7 @@ namespace bencode
 		std::map<bstring, bdata> m_kvs;
 	public:
 		bdict(std::map<bstring, bdata> &&kv) : m_kvs(std::move(kv)) {};
-		// bdict(map<bstring, bdata> &kv)  : m_kvs(kv) {};
+		bdict(const std::map<bstring, bdata> &kv)  : m_kvs(kv) {};
 
 		const std::map<bstring, bdata>& key_values() const {
 			return m_kvs;
@@ -27,7 +27,7 @@ namespace bencode
 		const bdata& at(const std::string &s) const;
 		const bdata* find(const std::string &s) const;
 		void merge(const bdict &bd);
-		void insert(std::pair<bstring, bdata>&& kv);
+		void insert(const bstring& bs, const bdata& bd);
 
 		friend std::ostream& operator<<(std::ostream&, const bdict&);
 	};

@@ -15,6 +15,7 @@ namespace bencode {
 	public:
 		blist(std::vector<bdata> &&items) : m_items(std::move(items)) {};
 		const std::vector<bdata>& values() const;
+		std::vector<bdata> values();
 
 		std::string display_type();
 		

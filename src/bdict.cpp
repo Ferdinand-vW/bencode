@@ -41,8 +41,8 @@ namespace bencode {
 		m_kvs.merge(keyvals);
 	}
 
-	void bdict::insert(std::pair<bstring, bdata>&& kv) {
-        m_kvs.insert(std::move(kv));
+	void bdict::insert(const bstring& bs, const bdata& bd) {
+        m_kvs.emplace(bs, bd);
     }
 
     std::ostream& operator<<(std::ostream& os, const bdict &bd) {
