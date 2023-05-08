@@ -23,38 +23,38 @@ target_include_directories(bencode PUBLIC
 include(GNUInstallDirs)
 
 # Add target to export set
-install(TARGETS ${LIBNAME}
-        EXPORT ${LIBNAME}Targets
+install(TARGETS bencode
+        EXPORT bencodeTargets
         ARCHIVE
         DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 # Install export set in install destination
-install(EXPORT ${LIBNAME}Targets
-        FILE ${LIBNAME}Config.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIBNAME})
+install(EXPORT bencodeTargets
+        FILE bencode.cmake
+        DESTINATION lib/cmake/bencode)
 
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
         "Config.cmake.in"
-        "${LIBNAME}Config.cmake"
-        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIBNAME}
+        "bencodeConfig.cmake"
+        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/bencode
         PATH_VARS CMAKE_INSTALL_LIBDIR
 )
 
 write_basic_package_version_file(
-        ${CMAKE_CURRENT_BINARY_DIR}/${LIBNAME}ConfigVersion.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/bencodeConfigVersion.cmake
         VERSION 1.0.0
-        COMPATIBILITY SameMajorVersion
+        COMPATIBILITY AnyNewerVersion
 )
 
 install(
-        FILES "${CMAKE_CURRENT_BINARY_DIR}/${LIBNAME}Config.cmake"
-              "${CMAKE_CURRENT_BINARY_DIR}/${LIBNAME}ConfigVersion.cmake"
-        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${LIBNAME}"
+        FILES ${CMAKE_CURRENT_BINARY_DIR}/bencodeConfig.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/bencodeConfigVersion.cmake
+        DESTINATION lib/cmake/bencode
 )
 
-export(EXPORT ${LIBNAME}Targets
-        FILE "${CMAKE_CURRENT_BINARY_DIR}/epoll_wrapper.cmake"
+export(EXPORT bencodeTargets
+        FILE "${CMAKE_CURRENT_BINARY_DIR}/bencode.cmake"
 )
 

@@ -7,18 +7,19 @@
 #include <sstream>
 #include <optional>
 
-#include "bencode/bdata.h"
+#include "bencode/bstring.h"
 #include "bencode/btypes.h"
 
 namespace bencode
 {
+	struct bdata;
 	class bdict {
-		std::map<bstring, bdata> m_kvs;
+		std::map<bstring, std::shared_ptr<bdata>> m_kvs;
 	public:
-		bdict(std::map<bstring, bdata> &&kv) : m_kvs(std::move(kv)) {};
-		bdict(const std::map<bstring, bdata> &kv)  : m_kvs(kv) {};
+		bdict(const std::map<bstring, std::shared_ptr<bdata>> &kv)  : m_kvs(kv) {};
+		bdict(const std::map<bstring, bdata> &kv);
 
-		const std::map<bstring, bdata>& key_values() const {
+		const std::map<bstring, std::shared_ptr<bdata>>& key_values() const {
 			return m_kvs;
 		}
 		const std::vector<bdata>& values() const;

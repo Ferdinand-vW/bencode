@@ -1,44 +1,43 @@
-#define BOOST_TEST_MODULE Identity
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
 #include "bencode/bencode.h"
+#include "gtest/gtest.h"
 
 
 using namespace bencode;
 // using namespace boost::outcome_v2;
 
-BOOST_AUTO_TEST_CASE(bint_identity)
+TEST(identity, bint)
 {
   std::string s = "i456e";
   std::stringstream ss(s);
   auto dec = decode<bint>(ss);
   auto enc = encode<bint>(dec.value());
-  BOOST_TEST(enc == s);
+
+  ASSERT_EQ(enc, s);
 }
 
-BOOST_AUTO_TEST_CASE(bstring_identity)
+TEST(identity, bstring)
 {
   std::string s = "4:aspq";
   std::stringstream ss(s);
   auto dec = decode<bstring>(ss);
   auto enc = encode<bstring>(dec.value());
-  BOOST_TEST(enc == s);
+  ASSERT_EQ(enc, s);
 }
 
-BOOST_AUTO_TEST_CASE(blist_identity)
+TEST(identity, blist)
 {
   std::string s = "l5:poiuyi9872ee";
   std::stringstream ss(s);
   auto dec = decode<blist>(ss);
   auto enc = encode<blist>(dec.value());
-  BOOST_TEST(enc == s);
+  ASSERT_EQ(enc, s);
 }
 
-BOOST_AUTO_TEST_CASE(bdict_identity)
+TEST(identity, bdict)
 {
   std::string s = "d2:uili321ei765eee";
   std::stringstream ss(s);
   auto dec = decode<bdict>(ss);
   auto enc = encode<bdict>(dec.value());
-  BOOST_TEST(enc == s);
+  ASSERT_EQ(enc, s);
 }

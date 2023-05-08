@@ -9,7 +9,7 @@ namespace bencode {
     class BError {
         std::string m;
         public:
-            BError(std::string &&x = "") : m(std::move(x)) {};
+            BError(const std::string &x = "") : m(x) {};
             std::string message() { return "Error! " + m; }
             friend std::ostream& operator<<(std::ostream& os, BError be) {
                 os << be.message();
@@ -63,8 +63,8 @@ namespace bencode {
                 return BError("Invalid Input. Next symbol is " + s);
             }
 
-            static BError generic_error(std::string &&m) {
-                return BError(std::move(m));
+            static BError generic_error(const std::string &m) {
+                return BError(m);
             }
     };
 }

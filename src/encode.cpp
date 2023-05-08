@@ -20,7 +20,7 @@ namespace bencode {
     template<>
     std::string encode<bdict>(const bdict &bd) {
         auto& kvs = bd.key_values();
-        std::vector<std::pair<bstring,bdata>> entries (kvs.begin(),kvs.end());
+        std::vector<std::pair<bstring,std::shared_ptr<bdata>>> entries (kvs.begin(),kvs.end());
         
         // sort elements by key
         sort(entries.begin(),entries.end(),[](auto &p1, auto &p2) { return p1.first < p2.first; });
@@ -28,7 +28,7 @@ namespace bencode {
         std::string s("");
         for(const auto& p : entries) {
             // encode key and value
-            s += encode<bstring>(p.first) + encode<bdata>(p.second);
+            s += encode<bstring>(p.first) + encode<bdata>(*p.second.get());
         }
 
 
@@ -47,7 +47,7 @@ namespace bencode {
 
     template<>
     std::string encode<bdata>(const bdata &b) {
-        auto benc = *b.value();
+        auto benc = b.value();
         return 
             std::visit(overloaded { 
                 [](const bint &bi) { return encode<bint>(bi); },

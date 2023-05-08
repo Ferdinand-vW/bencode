@@ -79,7 +79,7 @@ namespace bencode
 			return BErrorF::expected_string_symbols(word,n - num);
 		}
 
-		return bstring(std::move(buff));
+		return bstring(buff);
 	}
 	
 	template<>
@@ -120,14 +120,14 @@ namespace bencode
 			return BErrorF::expected_list_open(l);
 		}
 
-		std::vector<bdata> items;
+		std::vector<std::shared_ptr<bdata>> items;
 
 		// decode any additional items
 		while (is.peek() != 'e' && !is.eof()) {
 			auto item = decode<bdata>(is);
 			if (!item) { return item.error(); }
 			else { 
-				items.push_back(std::move(item.value()));
+				items.emplace_back(std::make_shared<bdata>(item.value()));
 			}
 		}
 
@@ -136,7 +136,7 @@ namespace bencode
 		}
 		is >> l; // drop e
 
-		return blist(std::move(items));
+		return blist(items);
 	}
 
 	template<>
@@ -148,7 +148,7 @@ namespace bencode
 			return BErrorF::expected_dict_open(d);
 		}
 
-		std::map<bstring,bdata> dict;
+		std::map<bstring,std::shared_ptr<bdata>> dict;
 
 		while(is.peek() != 'e' && !is.eof()) {
 			auto decodedKey = decode<bstring>(is);
@@ -159,9 +159,9 @@ namespace bencode
 			if (!decodedValue) { return decodedValue.error(); }
 			else { 
 				bstring key = decodedKey.value();
-				bdata val   = std::move(decodedValue.value());
+				bdata val   = decodedValue.value();
 				
-				dict.insert({key,std::move(val)}); 
+				dict.insert({key,std::make_shared<bdata>(val)}); 
 			}
 		}
 
@@ -171,7 +171,7 @@ namespace bencode
 
 		is >> d; // drop e
 
-		return bdict(std::move(dict));
+		return bdict(dict);
 	}
 
 	template<>
@@ -196,7 +196,7 @@ namespace bencode
 		} else if (peek_bdict(is)) {
 			auto vdict = decode<bdict>(is);
 			if (!vdict) { return vdict.error(); }
-			else 	    { return bdata(std::move(vdict.value())); }
+			else 	    { return bdata(vdict.value()); }
 		
 		} else {
 			char c = is.peek();

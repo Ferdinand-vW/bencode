@@ -1,29 +1,46 @@
 cmake_minimum_required (VERSION 3.8)
 
-find_package(Boost 1.80.0 REQUIRED COMPONENTS unit_test_framework)
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG release-1.12.1
+)
+FetchContent_MakeAvailable(googletest)
 
-add_definitions( -DBOOST_ALL_NO_LIB )
-add_definitions( -DBOOST_ALL_DYN_LINK )
+include_directories(${GTEST_INCLUDE_DIRS})
 
-include_directories(include)
+add_executable(
+    empty
+    empty.cpp
+)
 
-add_executable(empty empty.cpp)
-add_test(NAME bencode_empty COMMAND empty)
-target_link_libraries(empty bencode ${Boost_LIBRARIES})
+target_link_libraries(empty gtest_main bencode)
 
-add_executable(identity identity.cpp)
-add_test(NAME bencode_identity COMMAND identity)
-target_link_libraries(identity bencode ${Boost_LIBRARIES})
+add_executable(
+    identity
+    identity.cpp
+)
 
-add_executable(error error.cpp)
-add_test(NAME bencode_error COMMAND error)
-target_link_libraries(error bencode ${Boost_LIBRARIES})
+target_link_libraries(identity gtest_main bencode)
 
-add_executable(bsort bsort.cpp)
-add_test(NAME bencode_sort COMMAND bsort)
-target_link_libraries(bsort bencode ${Boost_LIBRARIES})
+add_executable(
+    bsort
+    bsort.cpp
+)
 
-add_dependencies(build_tests empty identity error bsort)
+target_link_libraries(bsort gtest_main bencode)
+
+add_executable(
+    error
+    error.cpp
+)
+
+target_link_libraries(error gtest_main bencode)
+
+
+include(GoogleTest)
+gtest_discover_tests(empty)
+gtest_discover_tests(identity)
+gtest_discover_tests(bsort)
+gtest_discover_tests(error)

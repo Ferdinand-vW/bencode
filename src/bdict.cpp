@@ -9,6 +9,14 @@
 
 namespace bencode {
 
+    bdict::bdict(const std::map<bstring, bdata> &kv)
+    {
+        for (const auto& i : kv)
+        {
+            m_kvs.emplace(i.first, std::make_shared<bdata>(i.second));
+        }
+    }
+
     std::string bdict::display_type() const {
         return "bdict";
     }
@@ -23,14 +31,14 @@ namespace bencode {
     
     const bdata& bdict::at(const std::string &s) const {
         bstring bs(std::vector<char>(s.begin(),s.end()));
-        return m_kvs.at(bs);
+        return *m_kvs.at(bs).get();
     }
 
     const bdata* bdict::find(const std::string &s) const {
         bstring bs(std::vector<char>(s.begin(),s.end()));
         auto v_it = m_kvs.find(bs);
         if(v_it != m_kvs.end()) {
-            return &v_it->second;
+            return v_it->second.get();
         } else {
             return nullptr;
         }
@@ -42,7 +50,7 @@ namespace bencode {
 	}
 
 	void bdict::insert(const bstring& bs, const bdata& bd) {
-        m_kvs.emplace(bs, bd);
+        m_kvs.emplace(bs, std::make_shared<bdata>(bd));
     }
 
     std::ostream& operator<<(std::ostream& os, const bdict &bd) {
